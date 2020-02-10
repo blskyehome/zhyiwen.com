@@ -163,73 +163,8 @@ export default {
     left: 0;
     background: rgba(26, 31, 59, 0.7);
   }
-  .search-box {
-    width: 85%;
-    margin: 0 auto;
-    padding-top: 80px;
-    .search-tab {
-      margin: 0;
-      padding: 0;
-      list-style-type: none;
-      text-align: center;
-      .search-tab-item {
-        position: relative;
-        cursor: pointer;
-        display: inline-block;
-        color: #fff;
-        padding: 5px 0;
-        margin: 0 15px 10px;
-        &.active {
-          border-bottom: 2px solid #fff;
-        }
-      }
-    }
-    .el-input-group__append,
-    .el-input-group__prepend {
-      background: #fff;
-      color: #999;
-      border: 0;
-    }
-    .el-input-group__append {
-      border-top-right-radius: 50px;
-      border-bottom-right-radius: 50px;
-      color: #f9ca05;
-      .el-icon-search {
-        font-weight: 900;
-        font-size: 18px;
-      }
-    }
-    .el-input-group__prepend {
-      border-top-left-radius: 50px;
-      border-bottom-left-radius: 50px;
-      border-right: 1px solid #dcdfe6;
-      padding-right: 5px;
-    }
-    .el-input__inner {
-      border: 0;
-    }
-    .search-logo {
-      width: 88px;
-      height: 34px;
-      display: block;
-      background-image: url(../assets/tubiao.png);
-      background-repeat: no-repeat;
-      transition: all 0.3s;
-      &.baidu {
-        background-position: 0 0;
-      }
-      &.bing {
-        background-position: 0 -40px;
-      }
-      &.huaban {
-        background-position: 0 -80px;
-      }
-      &.iconfont {
-        background-position: 0 -120px;
-      }
-    }
-  }
 }
+
 .el-main {
   padding: 0 !important;
   background-color: #f5f7fa;

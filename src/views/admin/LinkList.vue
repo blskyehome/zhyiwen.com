@@ -139,7 +139,7 @@ export default {
       linkData: [
         {
           img:
-            "https://img.alicdn.com/imgextra/i4/2590951958/TB2eTpYxUR1BeNjy0FmXXb0wVXa_!!2590951958.png",
+            "https://img.alicdn.com/imgextra/i3/2590951958/O1CN019KfYOB1QKo53K435W_!!2590951958.jpg",
           name: "百度",
           class: "常用推荐",
           url: "https://www.baidu.com/",
@@ -148,7 +148,7 @@ export default {
         },
         {
           img:
-            "https://img.alicdn.com/imgextra/i1/2590951958/O1CN011QKnwrArtSpUuI1_!!2590951958.png",
+            "https://img.alicdn.com/imgextra/i4/2590951958/O1CN01OrLAMj1QKo53dpnFP_!!2590951958.jpg",
           name: "12306",
           class: "常用推荐",
           url: "https://www.12306.cn/index/",
@@ -157,7 +157,7 @@ export default {
         },
         {
           img:
-            "https://img.alicdn.com/imgextra/i3/2590951958/TB2.D8yhnmWBKNjSZFBXXXxUFXa_!!2590951958.png",
+            "https://img.alicdn.com/imgextra/i4/2590951958/O1CN015gN8d51QKo56cskMu_!!2590951958.jpg",
           name: "58同城",
           class: "常用推荐",
           url: "https://www.58.com/",
@@ -214,6 +214,8 @@ export default {
     width: 16px;
     height: 16px;
     vertical-align: middle;
+    border: 1px solid #EBEEF5;
+    border-radius: 4px;
   }
   .fa-thumbs-up {
     color: #67c23a;
