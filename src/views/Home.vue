@@ -48,23 +48,39 @@
           <home-panel title="热门推荐">
             <div class="link-info">
               <el-row :gutter="20">
-                <el-col :xs="3" :sm="3" :md="3" :lg="3" :xl="3">
-                  <a class="hot-link link-top" href="#">
-                    <img src="../assets/logo.png" alt="" />
-                    <span>示例</span>
+                <el-col
+                  :xs="3"
+                  :sm="3"
+                  :md="3"
+                  :lg="3"
+                  :xl="3"
+                  v-for="(hot, index) in hotLinkData"
+                  :key="index"
+                >
+                  <a class="hot-link link-top" :href="hot.url" target="_blank">
+                    <img :src="hot.img" alt="" />
+                    <span>{{ hot.name }}</span>
                   </a>
                 </el-col>
               </el-row>
             </div>
           </home-panel>
-          <home-panel title="常用网站" icon="paperclip">
+          <home-panel v-for="(kind , index) in kindList" :key="index" :title="kind.text" :icon="kind.icon" v-if="kind.links != 0">
             <el-row :gutter="20">
-              <el-col :xs="12" :sm="8" :md="4" :lg="4" :xl="3">
-                <a class="hot-link" href="#">
-                  <img src="../assets/logo.png" alt="" />
-                  <span>示例</span>
+              <el-col
+                :xs="12"
+                :sm="8"
+                :md="4"
+                :lg="4"
+                :xl="3"
+                v-for="(link, index) in kind.links"
+                :key="index"
+              >
+                <a class="hot-link" :href="link.url" target="_blank">
+                  <img :src="link.img" alt="" />
+                  <span>{{ link.name }}</span>
                   <p class="desc">
-                    这是一个嘎哈的网站啊，到底胜多负少的顺丰到付是的发生
+                    {{ link.desc }}
                   </p>
                 </a>
               </el-col>
@@ -117,7 +133,68 @@ export default {
         title: "百度",
         name: "baidu",
         url: "http://www.baidu.com/s?wd="
-      }
+      },
+      kindList:[
+        {
+          code:"1",
+          icon:"paperclip",
+          text:"常用网站"
+        },
+        {
+          code:"2",
+          icon:"search",
+          text:"文档"
+        },
+        {
+          code:"3",
+          icon:"search",
+          text:"平面设计"
+        },
+        {
+          code:"4",
+          icon:"search",
+          text:"示例"
+        },
+      ],
+      linkData: [
+        {
+          img:
+            "https://img.alicdn.com/imgextra/i3/2590951958/O1CN019KfYOB1QKo53K435W_!!2590951958.jpg",
+          name: "百度",
+          kindCode: "1",
+          url: "https://www.baidu.com/",
+          hot: true,
+          desc: "百度一下，你就知道"
+        },
+        {
+          img:
+            "https://img.alicdn.com/imgextra/i4/2590951958/O1CN01OrLAMj1QKo53dpnFP_!!2590951958.jpg",
+          name: "12306",
+          kindCode: "3",
+          url: "https://www.12306.cn/index/",
+          hot: false,
+          desc: "中国铁路购票网站"
+        },
+        {
+          img:
+            "https://img.alicdn.com/imgextra/i4/2590951958/O1CN015gN8d51QKo56cskMu_!!2590951958.jpg",
+          name: "58同城",
+          kindCode: "2",
+          url: "https://www.58.com/",
+          hot: true,
+          desc: "找房子找工作，上58同城"
+        },
+        {
+          img:
+            "https://img.alicdn.com/imgextra/i2/2590951958/TB2jfVJxQ9WBuNjSspeXXaz5VXa_!!2590951958.png",
+          name: "搜狐",
+          kindCode: "1",
+          url: "http://www.sohu.com/",
+          hot: false,
+          desc: "中国加油，武汉加油"
+        }
+      ],
+      hotLinkData: []
     };
   },
   methods: {
@@ -126,7 +203,27 @@ export default {
     },
     openSearchPage: function() {
       window.open(this.activeSearchSelect.url + this.search, "_blank");
+    },
+    linkKind(){
+      // 遍历出每个分类的数据
+      for (let i = 0; i < this.kindList.length; i++){
+        let code = this.kindList[i].code;
+        let kindLink = this.linkData.filter(function(e){
+          return (e.kindCode == code)
+        })
+        this.kindList[i].links = kindLink;
+      }
+      console.log(this.kindList);
     }
+  },
+  created: function() {
+    this.hotLinkData = this.linkData.filter(function(e) {
+      return (e.hot == true);
+    });
+     this.linkKind();
+  },
+  mounted:function(){
+    
   },
   components: {
     // HelloWorld
@@ -187,6 +284,8 @@ export default {
     width: 26px;
     height: 26px;
     vertical-align: middle;
+    border: 1px solid #eee;
+    // border-radius: 50%;
   }
   span {
     margin-left: 32px;

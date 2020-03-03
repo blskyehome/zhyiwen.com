@@ -9,7 +9,7 @@
       >
       </el-input>
       <el-select
-        v-model="link.class"
+        v-model="link.kind"
         placeholder="请选择类别"
         class="search-select"
       >
@@ -51,7 +51,7 @@
         </el-table-column>
         <el-table-column prop="name" label="名称" width="120" align="center">
         </el-table-column>
-        <el-table-column prop="class" label="类别" width="120" align="center">
+        <el-table-column prop="kind" label="类别" width="120" align="center">
         </el-table-column>
         <el-table-column label="网址" header-align="center">
           <template slot-scope="scope">
@@ -65,7 +65,7 @@
             <i
               class="link-hot fa"
               :class="scope.row.hot ? 'fa-thumbs-up' : 'fa-level-up'"
-              @click="toggleHot"
+              @click="toggleHot(scope.$index)"
             ></i>
           </template>
         </el-table-column>
@@ -141,7 +141,7 @@ export default {
           img:
             "https://img.alicdn.com/imgextra/i3/2590951958/O1CN019KfYOB1QKo53K435W_!!2590951958.jpg",
           name: "百度",
-          class: "常用推荐",
+          kind: "常用推荐",
           url: "https://www.baidu.com/",
           hot: true,
           desc: "百度一下，你就知道"
@@ -150,7 +150,7 @@ export default {
           img:
             "https://img.alicdn.com/imgextra/i4/2590951958/O1CN01OrLAMj1QKo53dpnFP_!!2590951958.jpg",
           name: "12306",
-          class: "常用推荐",
+          kind: "常用推荐",
           url: "https://www.12306.cn/index/",
           hot: false,
           desc: "中国铁路购票网站"
@@ -159,16 +159,16 @@ export default {
           img:
             "https://img.alicdn.com/imgextra/i4/2590951958/O1CN015gN8d51QKo56cskMu_!!2590951958.jpg",
           name: "58同城",
-          class: "常用推荐",
+          kind: "常用推荐",
           url: "https://www.58.com/",
           hot: true,
-          desc: ""
+          desc: "找工作找家政，就上58同城"
         },
         {
           img:
             "https://img.alicdn.com/imgextra/i2/2590951958/TB2jfVJxQ9WBuNjSspeXXaz5VXa_!!2590951958.png",
           name: "搜狐",
-          class: "常用",
+          kind: "常用",
           url: "http://www.sohu.com/",
           hot: false,
           desc: "中国加油，武汉加油"
@@ -179,7 +179,7 @@ export default {
       link: {
         img: "",
         name: "",
-        class: "",
+        kind: "",
         url: "",
         hot: false,
         desc: ""
@@ -189,8 +189,8 @@ export default {
     };
   },
   methods: {
-    toggleHot() {
-      this.linkData.row.hot = !this.linkData.row.hot;
+    toggleHot(val) {
+      this.linkData[val].hot = !this.linkData[val].hot;
     },
     handleEdit(index, row) {
       console.log(index, row);
@@ -204,6 +204,9 @@ export default {
     handleCurrentChange(val) {
       console.log(`当前页: ${val}`);
     }
+  },
+  watch:{
+    
   }
 };
 </script>
