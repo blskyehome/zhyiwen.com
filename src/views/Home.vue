@@ -18,10 +18,6 @@
               >
                 {{ item.title }}
               </li>
-              <!-- <li class="search-tab-item active">百度</li>
-              <li class="search-tab-item">必应</li>
-              <li class="search-tab-item">花瓣网</li>
-              <li class="search-tab-item">阿里图标</li> -->
             </ul>
             <form :action="activeSearchSelect.url" target="_blank">
               <el-input
@@ -65,7 +61,7 @@
               </el-row>
             </div>
           </home-panel>
-          <home-panel v-for="(kind , index) in kindList" :key="index" :title="kind.text" :icon="kind.icon" v-if="kind.links != 0">
+          <home-panel v-for="(kind , index) in showKind" :key="index" :title="kind.text" :icon="kind.icon">
             <el-row :gutter="20">
               <el-col
                 :xs="12"
@@ -93,8 +89,6 @@
 </template>
 
 <script>
-// @ is an alias to /src
-// import HelloWorld from '@/components/HelloWorld.vue'
 import HomePanel from "@/components/HomePanel.vue";
 
 export default {
@@ -142,17 +136,17 @@ export default {
         },
         {
           code:"2",
-          icon:"search",
+          icon:"document",
           text:"文档"
         },
         {
           code:"3",
-          icon:"search",
+          icon:"brush",
           text:"平面设计"
         },
         {
           code:"4",
-          icon:"search",
+          icon:"eleme",
           text:"示例"
         },
       ],
@@ -213,7 +207,7 @@ export default {
         })
         this.kindList[i].links = kindLink;
       }
-      console.log(this.kindList);
+      // console.log(this.kindList);
     }
   },
   created: function() {
@@ -224,6 +218,15 @@ export default {
   },
   mounted:function(){
     
+  },
+  computed:{
+    showKind: function(){
+      return this.kindList.filter(function(item){
+        if(item.links != 0){
+          return item
+        }
+      })
+    }
   },
   components: {
     // HelloWorld
