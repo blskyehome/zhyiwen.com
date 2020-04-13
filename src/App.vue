@@ -111,4 +111,11 @@ body {
     }
   }
 }
+.clearfix::before, .clearfix::after {
+    display: table;
+    content: "";
+}
+.clearfix::after {
+    clear: both;
+}
 </style>

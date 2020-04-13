@@ -46,9 +46,9 @@
               <el-row :gutter="20">
                 <el-col
                   :xs="3"
-                  :sm="3"
-                  :md="3"
-                  :lg="3"
+                  :sm="6"
+                  :md="6"
+                  :lg="4"
                   :xl="3"
                   v-for="(hot, index) in hotLinkData"
                   :key="index"
@@ -61,7 +61,12 @@
               </el-row>
             </div>
           </home-panel>
-          <home-panel v-for="(kind , index) in showKind" :key="index" :title="kind.text" :icon="kind.icon">
+          <home-panel
+            v-for="(kind, index) in showKind"
+            :key="index"
+            :title="kind.text"
+            :icon="kind.icon"
+          >
             <el-row :gutter="20">
               <el-col
                 :xs="12"
@@ -90,7 +95,7 @@
 
 <script>
 import HomePanel from "@/components/HomePanel.vue";
-
+import link from "@/assets/linkTest.js";
 export default {
   name: "home",
   data: function() {
@@ -128,66 +133,44 @@ export default {
         name: "baidu",
         url: "http://www.baidu.com/s?wd="
       },
-      kindList:[
+      kindList: [
         {
-          code:"1",
-          icon:"paperclip",
-          text:"常用网站"
+          code: "1",
+          icon: "star-off",
+          text: "我的收藏"
         },
         {
-          code:"2",
-          icon:"document",
-          text:"文档"
+          code: "2",
+          icon: "paperclip",
+          text: "常用网站"
         },
         {
-          code:"3",
-          icon:"brush",
-          text:"平面设计"
+          code: "3",
+          icon: "collection",
+          text: "文档"
         },
         {
-          code:"4",
-          icon:"eleme",
-          text:"示例"
-        },
-      ],
-      linkData: [
-        {
-          img:
-            "https://img.alicdn.com/imgextra/i3/2590951958/O1CN019KfYOB1QKo53K435W_!!2590951958.jpg",
-          name: "百度",
-          kindCode: "1",
-          url: "https://www.baidu.com/",
-          hot: true,
-          desc: "百度一下，你就知道"
+          code: "4",
+          icon: "brush",
+          text: "设计相关"
         },
         {
-          img:
-            "https://img.alicdn.com/imgextra/i4/2590951958/O1CN01OrLAMj1QKo53dpnFP_!!2590951958.jpg",
-          name: "12306",
-          kindCode: "3",
-          url: "https://www.12306.cn/index/",
-          hot: false,
-          desc: "中国铁路购票网站"
+          code: "5",
+          icon: "service",
+          text: "学习网址"
         },
         {
-          img:
-            "https://img.alicdn.com/imgextra/i4/2590951958/O1CN015gN8d51QKo56cskMu_!!2590951958.jpg",
-          name: "58同城",
-          kindCode: "2",
-          url: "https://www.58.com/",
-          hot: true,
-          desc: "找房子找工作，上58同城"
+          code: "6",
+          icon: "connection",
+          text: "常用插件"
         },
         {
-          img:
-            "https://img.alicdn.com/imgextra/i2/2590951958/TB2jfVJxQ9WBuNjSspeXXaz5VXa_!!2590951958.png",
-          name: "搜狐",
-          kindCode: "1",
-          url: "http://www.sohu.com/",
-          hot: false,
-          desc: "中国加油，武汉加油"
+          code: "7",
+          icon: "s-opportunity",
+          text: "工具"
         }
       ],
+      linkData: link,
       hotLinkData: []
     };
   },
@@ -198,13 +181,13 @@ export default {
     openSearchPage: function() {
       window.open(this.activeSearchSelect.url + this.search, "_blank");
     },
-    linkKind(){
+    linkKind() {
       // 遍历出每个分类的数据
-      for (let i = 0; i < this.kindList.length; i++){
+      for (let i = 0; i < this.kindList.length; i++) {
         let code = this.kindList[i].code;
-        let kindLink = this.linkData.filter(function(e){
-          return (e.kindCode == code)
-        })
+        let kindLink = this.linkData.filter(function(e) {
+          return e.kindCode == code;
+        });
         this.kindList[i].links = kindLink;
       }
       // console.log(this.kindList);
@@ -212,20 +195,18 @@ export default {
   },
   created: function() {
     this.hotLinkData = this.linkData.filter(function(e) {
-      return (e.hot == true);
+      return e.hot == true;
     });
-     this.linkKind();
+    this.linkKind();
   },
-  mounted:function(){
-    
-  },
-  computed:{
-    showKind: function(){
-      return this.kindList.filter(function(item){
-        if(item.links != 0){
-          return item
+  mounted: function() {},
+  computed: {
+    showKind: function() {
+      return this.kindList.filter(function(item) {
+        if (item.links != 0) {
+          return item;
         }
-      })
+      });
     }
   },
   components: {
@@ -240,7 +221,7 @@ export default {
   .logo {
     line-height: 60px;
     font-weight: 600;
-    color: #f9ca05;
+    color: #5ddcb6;
   }
 }
 .search-cont {
@@ -287,14 +268,18 @@ export default {
     width: 26px;
     height: 26px;
     vertical-align: middle;
-    border: 1px solid #eee;
+    // border: 1px solid #eee;
     // border-radius: 50%;
   }
   span {
-    margin-left: 32px;
+    display: none;
     color: rgb(96, 98, 102);
     font-size: 14px;
     line-height: 26px;
+    @media only screen and (min-width: 768px) {
+      display: inline-block;
+      margin-left: 32px;
+    }
   }
   .desc {
     color: #909399;
@@ -308,6 +293,17 @@ export default {
     white-space: inherit;
     transition: all 0.3s;
     margin: 0 0 0 32px;
+  }
+  &:hover {
+    color: #5ddcb6;
+    text-decoration: underline;
+    span,
+    .desc {
+      color: inherit;
+    }
+  }
+  &.link-top {
+    height: 26px;
   }
 }
 </style>
