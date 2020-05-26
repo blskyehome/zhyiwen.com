@@ -221,7 +221,7 @@ export default {
     border-radius: 4px;
   }
   .fa-thumbs-up {
-    color: #67c23a;
+    color: #5ddcb6;
   }
   .fa-level-up {
     color: #999;
