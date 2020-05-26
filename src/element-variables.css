@@ -1,0 +1,39 @@
+/*
+Error: Invalid GBK character "\xE6"
+        on line 1 of C:\project\zhyiwen.com\src\assets/element-variables.scss
+
+1: /* 改变主题色变量 *\/
+2: $--color-primary: #5ddcb6;
+3: $--color-warning: #F79116;
+4: $--color-info: #03a9f4;
+5: 
+6: /* 改变 icon 字体路径变量，必需 *\/
+
+Backtrace:
+C:\project\zhyiwen.com\src\assets/element-variables.scss:1
+C:/Ruby25-x64/lib/ruby/gems/2.5.0/gems/sass-3.5.5/lib/sass/util.rb:1043:in `rescue in block in find_encoding_error'
+C:/Ruby25-x64/lib/ruby/gems/2.5.0/gems/sass-3.5.5/lib/sass/util.rb:1040:in `block in find_encoding_error'
+C:/Ruby25-x64/lib/ruby/gems/2.5.0/gems/sass-3.5.5/lib/sass/util.rb:1039:in `each'
+C:/Ruby25-x64/lib/ruby/gems/2.5.0/gems/sass-3.5.5/lib/sass/util.rb:1039:in `each_with_index'
+C:/Ruby25-x64/lib/ruby/gems/2.5.0/gems/sass-3.5.5/lib/sass/util.rb:1039:in `find_encoding_error'
+C:/Ruby25-x64/lib/ruby/gems/2.5.0/gems/sass-3.5.5/lib/sass/util.rb:767:in `check_sass_encoding'
+C:/Ruby25-x64/lib/ruby/gems/2.5.0/gems/sass-3.5.5/lib/sass/engine.rb:444:in `check_encoding!'
+C:/Ruby25-x64/lib/ruby/gems/2.5.0/gems/sass-3.5.5/lib/sass/engine.rb:400:in `_to_tree'
+C:/Ruby25-x64/lib/ruby/gems/2.5.0/gems/sass-3.5.5/lib/sass/engine.rb:290:in `render'
+C:/Ruby25-x64/lib/ruby/gems/2.5.0/gems/sass-3.5.5/lib/sass/plugin/compiler.rb:464:in `update_stylesheet'
+C:/Ruby25-x64/lib/ruby/gems/2.5.0/gems/sass-3.5.5/lib/sass/plugin/compiler.rb:215:in `block in update_stylesheets'
+C:/Ruby25-x64/lib/ruby/gems/2.5.0/gems/sass-3.5.5/lib/sass/plugin/compiler.rb:209:in `each'
+C:/Ruby25-x64/lib/ruby/gems/2.5.0/gems/sass-3.5.5/lib/sass/plugin/compiler.rb:209:in `update_stylesheets'
+C:/Ruby25-x64/lib/ruby/gems/2.5.0/gems/sass-3.5.5/lib/sass/plugin.rb:82:in `update_stylesheets'
+C:/Ruby25-x64/lib/ruby/gems/2.5.0/gems/sass-3.5.5/lib/sass/exec/sass_scss.rb:340:in `watch_or_update'
+C:/Ruby25-x64/lib/ruby/gems/2.5.0/gems/sass-3.5.5/lib/sass/exec/sass_scss.rb:51:in `process_result'
+C:/Ruby25-x64/lib/ruby/gems/2.5.0/gems/sass-3.5.5/lib/sass/exec/base.rb:52:in `parse'
+C:/Ruby25-x64/lib/ruby/gems/2.5.0/gems/sass-3.5.5/lib/sass/exec/base.rb:19:in `parse!'
+C:/Ruby25-x64/lib/ruby/gems/2.5.0/gems/sass-3.5.5/bin/sass:13:in `<top (required)>'
+C:/Ruby25-x64/bin/sass:23:in `load'
+C:/Ruby25-x64/bin/sass:23:in `<main>'
+*/
+body:before {
+  white-space: pre;
+  font-family: monospace;
+  content: "Error: Invalid GBK character \"\xE6\"\A         on line 1 of C:\project\zhyiwen.com\src\assets/element-variables.scss\A \A 1: /* 改变主题色变量 */\A 2: $--color-primary: #5ddcb6;\A 3: $--color-warning: #F79116;\A 4: $--color-info: #03a9f4;\A 5: \A 6: /* 改变 icon 字体路径变量，必需 */"; }

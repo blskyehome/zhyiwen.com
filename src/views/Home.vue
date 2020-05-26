@@ -54,7 +54,8 @@
                   :key="index"
                 >
                   <a class="hot-link link-top" :href="hot.url" target="_blank">
-                    <img :src="hot.img" alt="" />
+                    <img :src="hot.img" alt="" v-if="hot.img"/>
+                    <img src="../assets/testImg.png" alt="" v-else/>
                     <span>{{ hot.name }}</span>
                   </a>
                 </el-col>
@@ -78,10 +79,11 @@
                 :key="index"
               >
                 <a class="hot-link" :href="link.url" target="_blank">
-                  <img :src="link.img" alt="" />
+                  <img :src="link.img" alt="" v-if="link.img" />
+                  <img src="../assets/testImg.png" alt="" v-else/>
                   <span>{{ link.name }}</span>
                   <p class="desc">
-                    {{ link.desc }}
+                    <i v-show="link.desc">{{ link.desc }}</i>
                   </p>
                 </a>
               </el-col>
@@ -293,6 +295,9 @@ export default {
     white-space: inherit;
     transition: all 0.3s;
     margin: 0 0 0 32px;
+    i{
+      font-style:normal;
+    }
   }
   &:hover {
     color: #5ddcb6;

@@ -187,6 +187,37 @@ var link = [
     url: "https://cn.vuejs.org/v2/guide/",
     hot: true,
     desc: "是一套用于构建用户界面的渐进式框架"
+  },
+  {
+    img:
+      "http://uviewui.com/common/logo.png",
+    name: "uview",
+    kindCode: "3",
+    url: "http://uviewui.com/components/intro.html",
+    hot: false,
+    desc: "uView的目标是成为uni-app生态最优秀的UI框架"
+  },
+  {
+    img:
+      "https://img.alicdn.com/imgextra/i1/2590951958/O1CN012jQkWv1QKo6CC1cGn_!!2590951958.png",
+    name: "食堂项目",
+    kindCode: "1",
+    url: "http://192.168.0.50:8018/",
+    hot: false
+  },
+  {
+    name: "贵州公交项目",
+    kindCode: "1",
+    url: "http://localhost:8117/",
+    hot: false
+  },
+  {
+    img: "https://static.zcool.cn/git_z/z/site/favicon.ico",
+    name: "站酷",
+    kindCode: "4",
+    url: "https://www.zcool.com.cn/",
+    hot: false,
+    desc: "站酷 (ZCOOL)，中国设计师互动平台。深耕设计领域十四年，站酷聚集了1100万设计师、摄影师、插画师、艺术家、创意人，设计创意群体中具有较高的影响力与号召力。"
   }
 ]
 

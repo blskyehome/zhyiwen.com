@@ -81,7 +81,7 @@ export default {
   }
 }
 .el-header {
-  background: #f9ca05;
+  background: #b5e3cd;
   .admin-logo {
     float: left;
     line-height: 60px;
