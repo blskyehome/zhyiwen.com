@@ -1,6 +1,6 @@
 <template>
   <el-container class="admin">
-    <el-header>
+    <el-header class="admin-header">
       <div class="admin-logo">
         <i
           class="el-icon-eleme"
@@ -35,7 +35,7 @@
             <el-menu-item index="alinklist">网址列表</el-menu-item>
             <el-menu-item index="ahotsort">推荐排序</el-menu-item>
           </el-submenu>
-          <el-menu-item index="class">
+          <el-menu-item index="acategory">
             <i class="fa fa-male"></i>
             <span slot="title">类别管理</span>
           </el-menu-item>
@@ -73,14 +73,14 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .admin {
   height: 100%;
   .admin-main {
     height: calc(100% - 60px);
   }
 }
-.el-header {
+.admin-header {
   background: #b5e3cd;
   .admin-logo {
     float: left;
@@ -121,5 +121,32 @@ export default {
 }
 .el-main {
   background-color: #fdfdfd;
+}
+.el-breadcrumb{
+  margin-bottom: 15px;
+}
+.condition-cont {
+  margin-bottom: 20px;
+  .search-input {
+    width: 200px;
+    margin-right: 10px;
+  }
+  .search-select {
+    width: 200px;
+    margin-right: 10px;
+  }
+  .el-dropdown {
+    margin-right: 10px;
+    .el-button {
+      width: 200px;
+      text-align: left;
+    }
+    .el-icon--right {
+      float: right;
+    }
+  }
+  .link-add {
+    float: right;
+  }
 }
 </style>

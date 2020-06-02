@@ -5,6 +5,7 @@ import Admin from '@/views/Admin.vue'
 import AdminIndex from '@/views/admin/Index.vue'
 import AdminLinkList from '@/views/admin/LinkList.vue'
 import AdminHotSort from '@/views/admin/HotSort.vue'
+import AdminCategory from '@/views/admin/Category.vue'
 
 Vue.use(VueRouter)
 
@@ -34,6 +35,11 @@ const routes = [
         path: 'ahotsort',
         name: 'ahotsort',
         component: AdminHotSort
+      },
+      {
+        path: 'acategory',
+        name: 'acategory',
+        component: AdminCategory
       }
     ]
   },

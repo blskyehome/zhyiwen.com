@@ -1,6 +1,11 @@
 <template>
   <div class="admin-link-list">
-    <div class="condition-cont">
+    <el-breadcrumb separator="/">
+      <el-breadcrumb-item to="aindex">首页</el-breadcrumb-item>
+      <el-breadcrumb-item>网址管理</el-breadcrumb-item>
+      <el-breadcrumb-item>网址列表</el-breadcrumb-item>
+    </el-breadcrumb>
+    <div class="condition-cont clearfix">
       <el-input
         placeholder="请输入内容"
         prefix-icon="el-icon-search"
@@ -9,7 +14,7 @@
       >
       </el-input>
       <el-select
-        v-model="link.kind"
+        v-model="link.categoryId"
         placeholder="请选择类别"
         class="search-select"
       >
@@ -46,16 +51,16 @@
         </el-table-column>
         <el-table-column label="图标" width="120" align="center">
           <template slot-scope="scope">
-            <img :src="scope.row.img" alt="" class="link-icon" />
+            <img :src="scope.row.image" alt="" class="link-icon" />
           </template>
         </el-table-column>
         <el-table-column prop="name" label="名称" width="120" align="center">
         </el-table-column>
-        <el-table-column prop="kind" label="类别" width="120" align="center">
+        <el-table-column prop="categoryName" label="类别" width="120" align="center">
         </el-table-column>
         <el-table-column label="网址" header-align="center">
           <template slot-scope="scope">
-            <a :href="scope.row.link" target="_blank" class="link-url">{{
+            <a :href="scope.row.url" target="_blank" class="link-url">{{
               scope.row.url
             }}</a>
           </template>
@@ -64,7 +69,7 @@
           <template slot-scope="scope">
             <i
               class="link-hot fa"
-              :class="scope.row.hot ? 'fa-thumbs-up' : 'fa-level-up'"
+              :class="scope.row.isHot ? 'fa-thumbs-up' : 'fa-level-up'"
               @click="toggleHot(scope.$index)"
             ></i>
           </template>
@@ -101,27 +106,27 @@
     </el-pagination>
     </div>
     <el-dialog title="添加网址" :visible.sync="addLink">
-      <el-form :model="link">
+      <el-form :model="linkForm">
         <el-form-item label="网址名称" :label-width="formLabelWidth">
-          <el-input v-model="link.name" autocomplete="off"></el-input>
+          <el-input v-model="linkForm.name" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item label="网址图标" :label-width="formLabelWidth">
-          <el-input v-model="link.img" autocomplete="off"></el-input>
+        <el-form-item label="网址图片" :label-width="formLabelWidth">
+          <el-input v-model="linkForm.image" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="所属类别" :label-width="formLabelWidth">
-          <el-select v-model="link.class" placeholder="请选择类别">
-            <el-option label="常用网址" value="changyong"></el-option>
-            <el-option label="设计网址" value="sheji"></el-option>
+          <el-select v-model="linkForm.categoryId" placeholder="请选择类别">
+            <el-option label="常用网址" value="1"></el-option>
+            <el-option label="设计网址" value="2"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="网址" :label-width="formLabelWidth">
-          <el-input v-model="link.url" autocomplete="off"></el-input>
+          <el-input v-model="linkForm.url" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="是否推荐" :label-width="formLabelWidth">
-          <el-switch v-model="link.hot"></el-switch>
+          <el-switch v-model="linkForm.isHot"></el-switch>
         </el-form-item>
         <el-form-item label="链接详情" :label-width="formLabelWidth">
-          <el-input type="textarea" v-model="link.desc"></el-input>
+          <el-input type="textarea" v-model="linkForm.description"></el-input>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -138,51 +143,51 @@ export default {
     return {
       linkData: [
         {
-          img:
+          image:
             "https://img.alicdn.com/imgextra/i3/2590951958/O1CN019KfYOB1QKo53K435W_!!2590951958.jpg",
           name: "百度",
-          kind: "常用推荐",
+          categoryName: "常用推荐",
           url: "https://www.baidu.com/",
-          hot: true,
-          desc: "百度一下，你就知道"
+          isHot: true,
+          description: "百度一下，你就知道"
         },
         {
-          img:
+          image:
             "https://img.alicdn.com/imgextra/i4/2590951958/O1CN01OrLAMj1QKo53dpnFP_!!2590951958.jpg",
           name: "12306",
-          kind: "常用推荐",
+          categoryName: "常用推荐",
           url: "https://www.12306.cn/index/",
-          hot: false,
-          desc: "中国铁路购票网站"
+          isHot: false,
+          description: "中国铁路购票网站"
         },
         {
-          img:
+          image:
             "https://img.alicdn.com/imgextra/i4/2590951958/O1CN015gN8d51QKo56cskMu_!!2590951958.jpg",
           name: "58同城",
-          kind: "常用推荐",
+          categoryName: "常用推荐",
           url: "https://www.58.com/",
-          hot: true,
-          desc: "找工作找家政，就上58同城"
+          isHot: true,
+          description: "找工作找家政，就上58同城"
         },
         {
-          img:
+          image:
             "https://img.alicdn.com/imgextra/i2/2590951958/TB2jfVJxQ9WBuNjSspeXXaz5VXa_!!2590951958.png",
           name: "搜狐",
-          kind: "常用",
+          categoryName: "常用",
           url: "http://www.sohu.com/",
-          hot: false,
-          desc: "中国加油，武汉加油"
+          isHot: false,
+          description: "中国加油，武汉加油"
         }
       ],
       search: "",
       addLink: false,
-      link: {
-        img: "",
+      linkForm: {
+        image: "",
         name: "",
-        kind: "",
+        categoryId: "",
         url: "",
-        hot: false,
-        desc: ""
+        isHot: false,
+        description: ""
       },
       formLabelWidth: "120px",
       currentPage: 1
@@ -190,7 +195,7 @@ export default {
   },
   methods: {
     toggleHot(val) {
-      this.linkData[val].hot = !this.linkData[val].hot;
+      this.linkData[val].isHot = !this.linkData[val].isHot;
     },
     handleEdit(index, row) {
       console.log(index, row);
@@ -240,28 +245,5 @@ export default {
     }
   }
 }
-.condition-cont {
-  margin-bottom: 20px;
-  .search-input {
-    width: 200px;
-    margin-right: 10px;
-  }
-  .search-select {
-    width: 200px;
-    margin-right: 10px;
-  }
-  .el-dropdown {
-    margin-right: 10px;
-    .el-button {
-      width: 200px;
-      text-align: left;
-    }
-    .el-icon--right {
-      float: right;
-    }
-  }
-  .link-add {
-    float: right;
-  }
-}
+
 </style>

@@ -54,7 +54,7 @@
                   :key="index"
                 >
                   <a class="hot-link link-top" :href="hot.url" target="_blank">
-                    <img :src="hot.img" alt="" v-if="hot.img"/>
+                    <img :src="hot.image" alt="" v-if="hot.image"/>
                     <img src="../assets/testImg.png" alt="" v-else/>
                     <span>{{ hot.name }}</span>
                   </a>
@@ -65,7 +65,7 @@
           <home-panel
             v-for="(kind, index) in showKind"
             :key="index"
-            :title="kind.text"
+            :title="kind.name"
             :icon="kind.icon"
           >
             <el-row :gutter="20">
@@ -79,11 +79,11 @@
                 :key="index"
               >
                 <a class="hot-link" :href="link.url" target="_blank">
-                  <img :src="link.img" alt="" v-if="link.img" />
+                  <img :src="link.image" alt="" v-if="link.image" />
                   <img src="../assets/testImg.png" alt="" v-else/>
                   <span>{{ link.name }}</span>
                   <p class="desc">
-                    <i v-show="link.desc">{{ link.desc }}</i>
+                    <i v-show="link.description">{{ link.description }}</i>
                   </p>
                 </a>
               </el-col>
@@ -137,39 +137,39 @@ export default {
       },
       kindList: [
         {
-          code: "1",
+          id: "1",
           icon: "star-off",
-          text: "我的收藏"
+          name: "我的收藏"
         },
         {
-          code: "2",
+          id: "2",
           icon: "paperclip",
-          text: "常用网站"
+          name: "常用网站"
         },
         {
-          code: "3",
+          id: "3",
           icon: "collection",
-          text: "文档"
+          name: "文档"
         },
         {
-          code: "4",
+          id: "4",
           icon: "brush",
-          text: "设计相关"
+          name: "设计相关"
         },
         {
-          code: "5",
+          id: "5",
           icon: "service",
-          text: "学习网址"
+          name: "学习网址"
         },
         {
-          code: "6",
+          id: "6",
           icon: "connection",
-          text: "常用插件"
+          name: "常用插件"
         },
         {
-          code: "7",
+          id: "7",
           icon: "s-opportunity",
-          text: "工具"
+          name: "工具"
         }
       ],
       linkData: link,
@@ -186,9 +186,9 @@ export default {
     linkKind() {
       // 遍历出每个分类的数据
       for (let i = 0; i < this.kindList.length; i++) {
-        let code = this.kindList[i].code;
+        let code = this.kindList[i].id;
         let kindLink = this.linkData.filter(function(e) {
-          return e.kindCode == code;
+          return e.categoryId == code;
         });
         this.kindList[i].links = kindLink;
       }
@@ -197,7 +197,7 @@ export default {
   },
   created: function() {
     this.hotLinkData = this.linkData.filter(function(e) {
-      return e.hot == true;
+      return e.isHot == true;
     });
     this.linkKind();
   },

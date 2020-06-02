@@ -1,5 +1,7 @@
 <template>
     <div class="admin-index">
-        首页
+        <el-breadcrumb separator="/">
+            <el-breadcrumb-item>首页</el-breadcrumb-item>
+        </el-breadcrumb>
     </div>
 </template>

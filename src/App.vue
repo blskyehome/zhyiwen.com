@@ -75,7 +75,7 @@ body {
   .el-input-group__append {
     border-top-right-radius: 50px;
     border-bottom-right-radius: 50px;
-    color: #f9ca05;
+    color: #5ddcb6;
     .el-icon-search {
       font-weight: 900;
       font-size: 18px;
