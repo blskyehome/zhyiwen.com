@@ -14,12 +14,11 @@
       >
       </el-input>
       <el-select
-        v-model="link.categoryId"
+        v-model="selectCategory"
         placeholder="请选择类别"
         class="search-select"
       >
-        <el-option label="常用网址" value="changyong"></el-option>
-        <el-option label="设计网址" value="sheji"></el-option>
+        <el-option :label="item.name" :value="item.id" v-for="item in categoryList" :key="item.id"></el-option>
       </el-select>
       <!-- <el-dropdown>
         <el-button>
@@ -179,8 +178,46 @@ export default {
           description: "中国加油，武汉加油"
         }
       ],
+      categoryList: [
+        {
+          id: "1",
+          icon: "star-off",
+          name: "我的收藏"
+        },
+        {
+          id: "2",
+          icon: "paperclip",
+          name: "常用网站"
+        },
+        {
+          id: "3",
+          icon: "collection",
+          name: "文档"
+        },
+        {
+          id: "4",
+          icon: "brush",
+          name: "设计相关"
+        },
+        {
+          id: "5",
+          icon: "service",
+          name: "学习网址"
+        },
+        {
+          id: "6",
+          icon: "connection",
+          name: "常用插件"
+        },
+        {
+          id: "7",
+          icon: "s-opportunity",
+          name: "工具"
+        }
+      ],
       search: "",
       addLink: false,
+      selectCategory: '',
       linkForm: {
         image: "",
         name: "",

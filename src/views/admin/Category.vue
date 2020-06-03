@@ -22,12 +22,12 @@
         class="link-table"
         stripe
       >
-        <!--<el-table-column label="序号" align="center">
+        <el-table-column label="序号" align="center">
           <template slot-scope="scope">
             <span>{{ scope.$index }}</span>
           </template>
-        </el-table-column>-->
-        <el-table-column prop="id" label="id" align="center"> </el-table-column>
+        </el-table-column>
+        <!--<el-table-column prop="id" label="id" align="center"> </el-table-column>-->
         <el-table-column label="类别图标" align="center">
           <template slot-scope="scope">
             <i :class="'el-icon-'+scope.row.icon"></i>
@@ -75,47 +75,12 @@
 </template>
 
 <script>
+  // import _root from '@/common/request.js';
 export default {
   name: "Category",
   data() {
     return {
-      categoryList: [
-        {
-          id: "1",
-          icon: "star-off",
-          name: "我的收藏",
-        },
-        {
-          id: "2",
-          icon: "paperclip",
-          name: "常用网站",
-        },
-        {
-          id: "3",
-          icon: "collection",
-          name: "文档",
-        },
-        {
-          id: "4",
-          icon: "brush",
-          name: "设计相关",
-        },
-        {
-          id: "5",
-          icon: "service",
-          name: "学习网址",
-        },
-        {
-          id: "6",
-          icon: "connection",
-          name: "常用插件",
-        },
-        {
-          id: "7",
-          icon: "s-opportunity",
-          name: "工具",
-        },
-      ],
+      categoryList: [],
       categoryShow: false,
       formLabelWidth: "80px",
       addForm: {
@@ -124,13 +89,39 @@ export default {
       },
     };
   },
+  mounted() {
+    var self = this;
+    //加载页面初始化数据
+    self.onLoadData();
+  },
   methods: {
+    // 初始化数据
+    onLoadData() {
+      var self = this;
+      self.axios({
+        method: "get",
+        url: "http://zhyiwen.com:9003/category?page=1",
+        headers:{
+          'Content-type': 'application/json'
+        }
+      })
+              .then((response) => {
+                var category = response.data.result.records;
+                self.categoryList = category;
+              })
+              .catch(function(error) {
+                console.log(error);
+              })
+    },
+    // 修改分类
     handleEdit(index, row) {
       console.log(index, row);
     },
+    // 删除分类
     handleDelete(index, row) {
       console.log(index, row);
     },
+    // 新增分类
     addCategory() {
       this.categoryShow = false;
       this.axios({
@@ -145,17 +136,28 @@ export default {
         },
       })
         .then((response) => {
-          // this.$message({
-          //   message: "提交成功",
-          //   type: "success",
-          // });
-          console.log(response);
+          this.$message({
+            message: "提交成功",
+            type: "success",
+            offset: 70
+          });
+          // console.log(response);
+          this.clearData();
         })
         .catch(function(error) {
-          // this.$message.error("提交失败");
-          console.log(error);
+          this.$message({
+            message: "提交失败",
+            type: "error",
+            offset: 70
+          });
+          // console.log(error);
         })
     },
+    // 清除数据
+    clearData(){
+      this.addForm.name="";
+      this.addForm.icon="";
+    }
   },
 };
 </script>
