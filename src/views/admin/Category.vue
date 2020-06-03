@@ -71,6 +71,20 @@
         <el-button type="primary" @click="addCategory">确 定</el-button>
       </div>
     </el-dialog>
+    <el-dialog title="添加分类" :visible.sync="editCategoryShow">
+      <el-form :model="addForm">
+        <el-form-item label="分类名称" :label-width="formLabelWidth">
+          <el-input v-model="addForm.name" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="分类图标" :label-width="formLabelWidth">
+          <el-input v-model="addForm.icon" autocomplete="off"></el-input>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="editCategoryShow = false">取 消</el-button>
+        <el-button type="primary" @click="editCategory">确 定</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -82,8 +96,10 @@ export default {
     return {
       categoryList: [],
       categoryShow: false,
+      editCategoryShow: false,
       formLabelWidth: "80px",
       addForm: {
+        id: "",
         name: "",
         icon: "",
       },
@@ -105,20 +121,57 @@ export default {
           'Content-type': 'application/json'
         }
       })
-              .then((response) => {
-                self.categoryList = response.data.result.records;
-              })
-              .catch(function(error) {
-                console.log(error);
-              })
+        .then((response) => {
+          self.categoryList = response.data.result.records;
+        })
+        .catch(function(error) {
+          console.log(error);
+        })
     },
-    // 修改分类
+    // 点击修改
     handleEdit(index, row) {
       console.log(index, row);
+      let self = this;
+      self.editCategoryShow = true;
+      self.addForm.id = row.id;
+      self.addForm.icon = row.icon;
+      self.addForm.name = row.name;
     },
     // 删除分类
     handleDelete(index, row) {
-      console.log(index, row);
+      console.log(row.id);
+      let self = this;
+      self.$confirm('此操作将永久删除该分类, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        let ids = row.id;
+        self.axios.delete('http://zhyiwen.com:9003/category',{
+          data: [ids]
+        }).then(() => {
+          self.$message({
+            message: "删除成功",
+            type: "success",
+            offset: 70
+          });
+          // this.clearData();
+          self.$router.go(0)
+        })
+                .catch(function() {
+                  self.$message({
+                    message: "删除失败",
+                    type: "error",
+                    offset: 70
+                  });
+                })
+      }).catch(() => {
+        self.$message({
+          type: 'info',
+          message: '已取消删除',
+          offset: 70
+        });
+      });
     },
     // 新增分类
     addCategory() {
@@ -140,11 +193,45 @@ export default {
             type: "success",
             offset: 70
           });
-          this.clearData();
+          // this.clearData();
+          this.$router.go(0)
         })
         .catch(function() {
           this.$message({
             message: "提交失败",
+            type: "error",
+            offset: 70
+          });
+        })
+    },
+
+    // 修改分类
+    editCategory() {
+      this.editCategoryShow = false;
+      this.axios({
+        method: "post",
+        url: "http://zhyiwen.com:9003/category",
+        headers:{
+          'Content-type': 'application/json'
+        },
+        data: {
+          id: this.addForm.id,
+          name: this.addForm.name,
+          icon: this.addForm.icon,
+        },
+      })
+        .then(() => {
+          this.$message({
+            message: "修改成功",
+            type: "success",
+            offset: 70
+          });
+          // this.clearData();
+          this.$router.go(0)
+        })
+        .catch(function() {
+          this.$message({
+            message: "修改失败",
             type: "error",
             offset: 70
           });
