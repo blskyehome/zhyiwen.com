@@ -90,14 +90,14 @@ export default {
     };
   },
   mounted() {
-    var self = this;
+    let self = this;
     //加载页面初始化数据
     self.onLoadData();
   },
   methods: {
     // 初始化数据
     onLoadData() {
-      var self = this;
+      let self = this;
       self.axios({
         method: "get",
         url: "http://zhyiwen.com:9003/category?page=1",
@@ -106,8 +106,7 @@ export default {
         }
       })
               .then((response) => {
-                var category = response.data.result.records;
-                self.categoryList = category;
+                self.categoryList = response.data.result.records;
               })
               .catch(function(error) {
                 console.log(error);
@@ -135,29 +134,27 @@ export default {
           icon: this.addForm.icon,
         },
       })
-        .then((response) => {
+        .then(() => {
           this.$message({
             message: "提交成功",
             type: "success",
             offset: 70
           });
-          // console.log(response);
           this.clearData();
         })
-        .catch(function(error) {
+        .catch(function() {
           this.$message({
             message: "提交失败",
             type: "error",
             offset: 70
           });
-          // console.log(error);
         })
     },
     // 清除数据
     clearData(){
       this.addForm.name="";
       this.addForm.icon="";
-    }
+    },
   },
 };
 </script>
