@@ -114,6 +114,7 @@ export default {
     // 初始化数据
     onLoadData() {
       let self = this;
+
       self.axios({
         method: "get",
         url: "http://zhyiwen.com:9003/category?page=1",
@@ -176,6 +177,14 @@ export default {
     // 新增分类
     addCategory() {
       this.categoryShow = false;
+      // _root.request({
+      //     url: _root.api.category,
+      //     method: "post",
+      //     data: {
+      //         name: this.addForm.name,
+      //         icon: this.addForm.icon,
+      //     },
+      // })
       this.axios({
         method: "post",
         url: "http://zhyiwen.com:9003/category",
@@ -239,8 +248,11 @@ export default {
     },
     // 清除数据
     clearData(){
-      this.addForm.name="";
-      this.addForm.icon="";
+      this.addForm = {
+        id: "",
+        name: "",
+        icon: "",
+      };
     },
   },
 };

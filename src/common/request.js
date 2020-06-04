@@ -4,14 +4,12 @@
  * @version 1.0
  */
 import axios from 'axios'
-import {message} from 'element-ui'
 
 const _api_root = 'http://zhyiwen.com:9003';
 
 const api = {
-    category: {
-        getCategoryList: _api_root + "/category?page=1"
-    }
+    category:  _api_root + "/category",
+    link:  _api_root + "/link"
 };
 
 const request = function(o){
@@ -26,20 +24,10 @@ const request = function(o){
         dataType: o.dataType || "json",
     })
         .then((response) => {
-            message({
-                message: "提交成功",
-                type: "success",
-                offset: 70
-            });
             console.log(response);
             // this.clearData();
         })
         .catch((error) => {
-            message({
-                message: "提交失败",
-                type: "error",
-                offset: 70
-            });
             console.log(error);
             // this.clearData();
         })

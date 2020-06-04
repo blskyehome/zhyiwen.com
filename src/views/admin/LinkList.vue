@@ -37,7 +37,7 @@
         icon="el-icon-plus"
         type="primary"
         class="link-add"
-        @click="addLink = true"
+        @click="addLinkShow = true"
         >新增</el-button
       >
     </div>
@@ -104,7 +104,7 @@
       :total="200">
     </el-pagination>
     </div>
-    <el-dialog title="添加网址" :visible.sync="addLink">
+    <el-dialog title="添加网址" :visible.sync="addLinkShow">
       <el-form :model="linkForm">
         <el-form-item label="网址名称" :label-width="formLabelWidth">
           <el-input v-model="linkForm.name" autocomplete="off"></el-input>
@@ -114,8 +114,7 @@
         </el-form-item>
         <el-form-item label="所属类别" :label-width="formLabelWidth">
           <el-select v-model="linkForm.categoryId" placeholder="请选择类别">
-            <el-option label="常用网址" value="1"></el-option>
-            <el-option label="设计网址" value="2"></el-option>
+            <el-option :label="item.name" :value="item.id" v-for="item in categoryList" :key="item.id"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="网址" :label-width="formLabelWidth">
@@ -130,7 +129,7 @@
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="addLink = false">取 消</el-button>
-        <el-button type="primary" @click="addLink = false">确 定</el-button>
+        <el-button type="primary" @click="addLink">确 定</el-button>
       </div>
     </el-dialog>
   </div>
@@ -140,83 +139,10 @@
 export default {
   data() {
     return {
-      linkData: [
-        {
-          image:
-            "https://img.alicdn.com/imgextra/i3/2590951958/O1CN019KfYOB1QKo53K435W_!!2590951958.jpg",
-          name: "百度",
-          categoryName: "常用推荐",
-          url: "https://www.baidu.com/",
-          isHot: true,
-          description: "百度一下，你就知道"
-        },
-        {
-          image:
-            "https://img.alicdn.com/imgextra/i4/2590951958/O1CN01OrLAMj1QKo53dpnFP_!!2590951958.jpg",
-          name: "12306",
-          categoryName: "常用推荐",
-          url: "https://www.12306.cn/index/",
-          isHot: false,
-          description: "中国铁路购票网站"
-        },
-        {
-          image:
-            "https://img.alicdn.com/imgextra/i4/2590951958/O1CN015gN8d51QKo56cskMu_!!2590951958.jpg",
-          name: "58同城",
-          categoryName: "常用推荐",
-          url: "https://www.58.com/",
-          isHot: true,
-          description: "找工作找家政，就上58同城"
-        },
-        {
-          image:
-            "https://img.alicdn.com/imgextra/i2/2590951958/TB2jfVJxQ9WBuNjSspeXXaz5VXa_!!2590951958.png",
-          name: "搜狐",
-          categoryName: "常用",
-          url: "http://www.sohu.com/",
-          isHot: false,
-          description: "中国加油，武汉加油"
-        }
-      ],
-      categoryList: [
-        {
-          id: "1",
-          icon: "star-off",
-          name: "我的收藏"
-        },
-        {
-          id: "2",
-          icon: "paperclip",
-          name: "常用网站"
-        },
-        {
-          id: "3",
-          icon: "collection",
-          name: "文档"
-        },
-        {
-          id: "4",
-          icon: "brush",
-          name: "设计相关"
-        },
-        {
-          id: "5",
-          icon: "service",
-          name: "学习网址"
-        },
-        {
-          id: "6",
-          icon: "connection",
-          name: "常用插件"
-        },
-        {
-          id: "7",
-          icon: "s-opportunity",
-          name: "工具"
-        }
-      ],
+      linkData: [],
+      categoryList: [],
       search: "",
-      addLink: false,
+      addLinkShow: false,
       selectCategory: '',
       linkForm: {
         image: "",
@@ -230,7 +156,31 @@ export default {
       currentPage: 1
     };
   },
+  mounted() {
+    let self = this;
+    //加载页面初始化数据
+    self.onLoadData();
+  },
   methods: {
+    // 初始化数据
+    onLoadData() {
+      let self = this;
+      self.axios.all([
+        self.axios.get('http://zhyiwen.com:9003/category?page=1'),
+        self.axios.get('http://zhyiwen.com:9003/link?page=1')
+      ])
+         .then(self.axios.spread(function (cateData, linkData) {
+           // 上面两个请求都完成后，才执行这个回调方法
+           // console.log('category', cateData.data);
+           // console.log('link', linkData.data);
+           self.categoryList = cateData.data.result.records;
+           self.linkData = linkData.data.result.records
+         }))
+        .catch(function(error) {
+          console.log(error);
+        })
+
+    },
     toggleHot(val) {
       this.linkData[val].isHot = !this.linkData[val].isHot;
     },
@@ -245,10 +195,56 @@ export default {
     },
     handleCurrentChange(val) {
       console.log(`当前页: ${val}`);
-    }
+    },
+    // 新增网址
+    addLink(){
+      this.addLinkShow = false;
+      this.axios({
+        method: "post",
+        url: "http://zhyiwen.com:9003/link",
+        headers:{
+          'Content-type': 'application/json'
+        },
+        data: {
+          image: this.linkForm.image,
+          name: this.linkForm.name,
+          categoryId: this.linkForm.categoryId,
+          url: this.linkForm.url,
+          isHot: this.linkForm.isHot,
+          description: this.linkForm.description
+        },
+      })
+        .then(() => {
+          this.$message({
+            message: "提交成功",
+            type: "success",
+            offset: 70
+          });
+          // this.clearData();
+          this.$router.go(0)
+        })
+        .catch(function() {
+          this.$message({
+            message: "提交失败",
+            type: "error",
+            offset: 70
+          });
+        })
+    },
+    // 清除数据
+    clearData(){
+      this.linkForm = {
+        image: "",
+        name: "",
+        categoryId: "",
+        url: "",
+        isHot: false,
+        description: ""
+      };
+    },
   },
   watch:{
-    
+
   }
 };
 </script>
