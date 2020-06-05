@@ -36,7 +36,7 @@
             <el-menu-item index="ahotsort">推荐排序</el-menu-item>
           </el-submenu>
           <el-menu-item index="acategory">
-            <i class="fa fa-male"></i>
+            <i class="fa fa-sitemap"></i>
             <span slot="title">类别管理</span>
           </el-menu-item>
           <el-menu-item index="self" disabled>

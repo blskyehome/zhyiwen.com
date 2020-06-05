@@ -71,7 +71,7 @@
         <el-button type="primary" @click="addCategory">确 定</el-button>
       </div>
     </el-dialog>
-    <el-dialog title="添加分类" :visible.sync="editCategoryShow">
+    <el-dialog title="修改分类" :visible.sync="editCategoryShow">
       <el-form :model="addForm">
         <el-form-item label="分类名称" :label-width="formLabelWidth">
           <el-input v-model="addForm.name" autocomplete="off"></el-input>

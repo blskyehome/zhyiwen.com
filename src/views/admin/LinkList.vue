@@ -53,7 +53,7 @@
             <img :src="scope.row.image" alt="" class="link-icon" />
           </template>
         </el-table-column>
-        <el-table-column prop="name" label="名称" width="120" align="center">
+        <el-table-column prop="name" label="名称" width="150" align="center">
         </el-table-column>
         <el-table-column prop="categoryName" label="类别" width="120" align="center">
         </el-table-column>
@@ -68,7 +68,7 @@
           <template slot-scope="scope">
             <i
               class="link-hot fa"
-              :class="scope.row.isHot ? 'fa-thumbs-up' : 'fa-level-up'"
+              :class="scope.row.isHot === 1 ? 'fa-thumbs-up' : 'fa-level-up'"
               @click="toggleHot(scope.$index)"
             ></i>
           </template>
@@ -121,7 +121,7 @@
           <el-input v-model="linkForm.url" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="是否推荐" :label-width="formLabelWidth">
-          <el-switch v-model="linkForm.isHot"></el-switch>
+          <el-switch v-model="linkForm.hot"></el-switch>
         </el-form-item>
         <el-form-item label="链接详情" :label-width="formLabelWidth">
           <el-input type="textarea" v-model="linkForm.description"></el-input>
@@ -130,6 +130,34 @@
       <div slot="footer" class="dialog-footer">
         <el-button @click="addLink = false">取 消</el-button>
         <el-button type="primary" @click="addLink">确 定</el-button>
+      </div>
+    </el-dialog>
+    <el-dialog title="修改网址" :visible.sync="editLinkShow">
+      <el-form :model="linkForm">
+        <el-form-item label="网址名称" :label-width="formLabelWidth">
+          <el-input v-model="linkForm.name" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="网址图片" :label-width="formLabelWidth">
+          <el-input v-model="linkForm.image" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="所属类别" :label-width="formLabelWidth">
+          <el-select v-model="linkForm.categoryId" placeholder="请选择类别">
+            <el-option :label="item.name" :value="item.id" v-for="item in categoryList" :key="item.id"></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="网址" :label-width="formLabelWidth">
+          <el-input v-model="linkForm.url" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="是否推荐" :label-width="formLabelWidth">
+          <el-switch v-model="linkForm.hot"></el-switch>
+        </el-form-item>
+        <el-form-item label="链接详情" :label-width="formLabelWidth">
+          <el-input type="textarea" v-model="linkForm.description"></el-input>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="addLink = false">取 消</el-button>
+        <el-button type="primary" @click="editLink">确 定</el-button>
       </div>
     </el-dialog>
   </div>
@@ -143,13 +171,17 @@ export default {
       categoryList: [],
       search: "",
       addLinkShow: false,
+      editLinkShow: false,
       selectCategory: '',
+      pushCategory: '',
       linkForm: {
         image: "",
         name: "",
         categoryId: "",
+        categoryName: "",
         url: "",
-        isHot: false,
+        hot: false,
+        isHot: 0,
         description: ""
       },
       formLabelWidth: "120px",
@@ -182,13 +214,49 @@ export default {
 
     },
     toggleHot(val) {
-      this.linkData[val].isHot = !this.linkData[val].isHot;
+      this.linkData[val].hot = !this.linkData[val].hot;
     },
     handleEdit(index, row) {
       console.log(index, row);
+      let self = this;
+      self.editLinkShow = true;
+      self.linkForm = row;
     },
     handleDelete(index, row) {
       console.log(index, row);
+      console.log(row.id);
+      let self = this;
+      self.$confirm('此操作将永久删除该分类, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        let ids = row.id;
+        self.axios.delete('http://zhyiwen.com:9003/link',{
+          data: [ids]
+        }).then(() => {
+          self.$message({
+            message: "删除成功",
+            type: "success",
+            offset: 70
+          });
+          // this.clearData();
+          self.$router.go(0)
+        })
+                .catch(function() {
+                  self.$message({
+                    message: "删除失败",
+                    type: "error",
+                    offset: 70
+                  });
+                })
+      }).catch(() => {
+        self.$message({
+          type: 'info',
+          message: '已取消删除',
+          offset: 70
+        });
+      });
     },
     handleSizeChange(val) {
       console.log(`每页 ${val} 条`);
@@ -198,7 +266,63 @@ export default {
     },
     // 新增网址
     addLink(){
-      this.addLinkShow = false;
+      let self = this;
+      self.addLinkShow = false;
+      if(this.linkForm.hot === true){
+        this.linkForm.isHot = 1;
+      }else {
+        this.linkForm.isHot = 0;
+      }
+      self.pushCategory = self.categoryList.filter(function (e) {
+        return e.id === self.linkForm.categoryId;
+      });
+      // console.log("取出来的分类是什么"+JSON.stringify(self.pushCategory));
+      self.axios({
+        method: "post",
+        url: "http://zhyiwen.com:9003/link",
+        headers:{
+          'Content-type': 'application/json'
+        },
+        data: {
+          image: self.linkForm.image,
+          name: self.linkForm.name,
+          categoryId: self.linkForm.categoryId,
+          categoryName: self.pushCategory[0].name,
+          url: self.linkForm.url,
+          isHot: self.linkForm.isHot,
+          description: self.linkForm.description
+        },
+      })
+        .then(() => {
+          self.$message({
+            message: "提交成功",
+            type: "success",
+            offset: 70
+          });
+          // this.clearData();
+          self.$router.go(0)
+        })
+        .catch(function() {
+          self.$message({
+            message: "提交失败",
+            type: "error",
+            offset: 70
+          });
+        })
+    },
+
+    // 修改网址
+    editLink(){
+      this.editLinkShow = false;
+      if(this.linkForm.hot === true){
+        this.linkForm.isHot = 1;
+      }else {
+        this.linkForm.isHot = 0;
+      }
+      self.pushCategory = self.categoryList.filter(function (e) {
+        return e.id === self.linkForm.categoryId;
+      });
+      console.log("取出来的分类是什么"+JSON.stringify(self.pushCategory));
       this.axios({
         method: "post",
         url: "http://zhyiwen.com:9003/link",
@@ -206,30 +330,31 @@ export default {
           'Content-type': 'application/json'
         },
         data: {
-          image: this.linkForm.image,
-          name: this.linkForm.name,
-          categoryId: this.linkForm.categoryId,
-          url: this.linkForm.url,
-          isHot: this.linkForm.isHot,
-          description: this.linkForm.description
+          image: self.linkForm.image,
+          name: self.linkForm.name,
+          categoryId: self.linkForm.categoryId,
+          categoryName: self.pushCategory[0].name,
+          url: self.linkForm.url,
+          isHot: self.linkForm.isHot,
+          description: self.linkForm.description
         },
       })
-        .then(() => {
-          this.$message({
-            message: "提交成功",
-            type: "success",
-            offset: 70
-          });
-          // this.clearData();
-          this.$router.go(0)
-        })
-        .catch(function() {
-          this.$message({
-            message: "提交失败",
-            type: "error",
-            offset: 70
-          });
-        })
+              .then(() => {
+                this.$message({
+                  message: "修改成功",
+                  type: "success",
+                  offset: 70
+                });
+                // this.clearData();
+                this.$router.go(0)
+              })
+              .catch(function() {
+                this.$message({
+                  message: "修改失败",
+                  type: "error",
+                  offset: 70
+                });
+              })
     },
     // 清除数据
     clearData(){
@@ -237,6 +362,7 @@ export default {
         image: "",
         name: "",
         categoryId: "",
+        categoryName: "",
         url: "",
         isHot: false,
         description: ""
