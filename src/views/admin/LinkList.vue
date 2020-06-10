@@ -221,6 +221,7 @@ export default {
       let self = this;
       self.editLinkShow = true;
       self.linkForm = row;
+      self.pushCategory = ''
     },
     handleDelete(index, row) {
       console.log(index, row);
@@ -346,7 +347,7 @@ export default {
                   offset: 70
                 });
                 // this.clearData();
-                this.$router.go(0)
+                // this.$router.go(0)
               })
               .catch(function() {
                 this.$message({
