@@ -54,8 +54,8 @@
                   :key="index"
                 >
                   <a class="hot-link link-top" :href="hot.url" target="_blank">
-                    <img :src="hot.image" alt="" v-if="hot.image" />
-                    <img src="../assets/testImg.png" alt="" v-else />
+                    <img :src="hot.image" alt="" v-if="hot.image"/>
+                    <img src="../assets/testImg.png" alt="" v-else/>
                     <span>{{ hot.name }}</span>
                   </a>
                 </el-col>
@@ -80,7 +80,7 @@
               >
                 <a class="hot-link" :href="link.url" target="_blank">
                   <img :src="link.image" alt="" v-if="link.image" />
-                  <img src="../assets/testImg.png" alt="" v-else />
+                  <img src="../assets/testImg.png" alt="" v-else/>
                   <span>{{ link.name }}</span>
                   <p class="desc">
                     <i v-show="link.description">{{ link.description }}</i>
@@ -108,36 +108,36 @@ export default {
           logo: "",
           title: "百度",
           name: "baidu",
-          url: "http://www.baidu.com/s?wd=",
+          url: "http://www.baidu.com/s?wd="
         },
         {
           logo: "",
           title: "必应",
           name: "bing",
-          url: "https://cn.bing.com/search?q=",
+          url: "https://cn.bing.com/search?q="
         },
         {
           logo: "",
           title: "花瓣网",
           name: "huaban",
-          url: "https://huaban.com/search/?q=",
+          url: "https://huaban.com/search/?q="
         },
         {
           logo: "",
           title: "阿里图标",
           name: "iconfont",
-          url: "https://www.iconfont.cn/search/index?q=",
-        },
+          url: "https://www.iconfont.cn/search/index?q="
+        }
       ],
       activeSearchSelect: {
         logo: "",
         title: "百度",
         name: "baidu",
-        url: "http://www.baidu.com/s?wd=",
+        url: "http://www.baidu.com/s?wd="
       },
       kindList: [],
       linkData: [],
-      hotLinkData: [],
+      hotLinkData: []
     };
   },
   mounted() {
@@ -149,23 +149,20 @@ export default {
     // 初始化数据
     onLoadData() {
       let self = this;
-      self.axios
-        .all([
-          self.axios.get("http://zhyiwen.com:9003/category?page=1"),
-          self.axios.get("http://zhyiwen.com:9003/link?page=1"),
-        ])
-        .then(
-          self.axios.spread(function(cateData, linkData) {
-            // 上面两个请求都完成后，才执行这个回调方法
-            console.log("category", cateData.data);
-            console.log("link", linkData.data);
-            self.kindList = cateData.data.result.records;
-            self.linkData = linkData.data.result.records;
-          })
-        )
+      self.axios.all([
+        self.axios.get('http://zhyiwen.com:9003/category?page=1'),
+        self.axios.get('http://zhyiwen.com:9003/link?page=1')
+      ])
+         .then(self.axios.spread(function (cateData, linkData) {
+           // 上面两个请求都完成后，才执行这个回调方法
+          //  console.log('category', cateData.data);
+           // console.log('link', linkData.data);
+           self.kindList = cateData.data.result.records;
+           self.linkData = linkData.data.result.records
+         }))
         .catch(function(error) {
           console.log(error);
-        });
+        })
     },
     toggleSearch: function(item) {
       this.activeSearchSelect = item;
@@ -184,16 +181,14 @@ export default {
         self.kindList[i].links = kindLink;
       }
       console.log(self.kindList);
-    },
+    }
   },
   created: function() {
-    let self = this;
-    self.onLoadData();
-    self.linkKind();
-    self.hotLinkData = self.linkData.filter(function(e) {
-      // console.log(e);
-      return e.isHot == 1;
+    this.hotLinkData = this.linkData.filter(function(e) {
+      return e.isHot == true;
     });
+    this.onLoadData();
+    this.linkKind();
   },
   computed: {
     showKind: function() {
@@ -202,12 +197,12 @@ export default {
           return item;
         }
       });
-    },
+    }
   },
   components: {
     // HelloWorld
-    HomePanel,
-  },
+    HomePanel
+  }
 };
 </script>
 
@@ -288,8 +283,8 @@ export default {
     white-space: inherit;
     transition: all 0.3s;
     margin: 0 0 0 32px;
-    i {
-      font-style: normal;
+    i{
+      font-style:normal;
     }
   }
   &:hover {

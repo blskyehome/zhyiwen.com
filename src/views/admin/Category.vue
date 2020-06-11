@@ -24,7 +24,7 @@
       >
         <el-table-column label="序号" align="center">
           <template slot-scope="scope">
-            <span>{{ scope.$index }}</span>
+            <span>{{ scope.$index+1 }}</span>
           </template>
         </el-table-column>
         <!--<el-table-column prop="id" label="id" align="center"> </el-table-column>-->

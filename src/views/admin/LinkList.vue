@@ -18,7 +18,12 @@
         placeholder="请选择类别"
         class="search-select"
       >
-        <el-option :label="item.name" :value="item.id" v-for="item in categoryList" :key="item.id"></el-option>
+        <el-option
+          :label="item.name"
+          :value="item.id"
+          v-for="item in categoryList"
+          :key="item.id"
+        ></el-option>
       </el-select>
       <!-- <el-dropdown>
         <el-button>
@@ -42,10 +47,17 @@
       >
     </div>
     <div class="table-cont">
-      <el-table :data="linkData" style="width: 100%" class="link-table" stripe>
+      <el-table
+        :data="
+          linkData.slice((currentPage - 1) * PageSize, currentPage * PageSize)
+        "
+        style="width: 100%"
+        class="link-table"
+        stripe
+      >
         <el-table-column label="序号" width="50" align="center">
           <template slot-scope="scope">
-            <span>{{ scope.$index }}</span>
+            <span>{{ scope.$index+1 }}</span>
           </template>
         </el-table-column>
         <el-table-column label="图标" width="120" align="center">
@@ -55,7 +67,12 @@
         </el-table-column>
         <el-table-column prop="name" label="名称" width="150" align="center">
         </el-table-column>
-        <el-table-column prop="categoryName" label="类别" width="120" align="center">
+        <el-table-column
+          prop="categoryName"
+          label="类别"
+          width="120"
+          align="center"
+        >
         </el-table-column>
         <el-table-column label="网址" header-align="center">
           <template slot-scope="scope">
@@ -95,14 +112,14 @@
         </el-table-column>
       </el-table>
       <el-pagination
-      @size-change="handleSizeChange"
-      @current-change="handleCurrentChange"
-      :current-page.sync="currentPage"
-      :page-size="15"
-      layout="total, prev, pager, next"
-      hide-on-single-page
-      :total="200">
-    </el-pagination>
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+        :current-page.sync="currentPage"
+        :page-size="PageSize"
+        layout="total, sizes, prev, pager, next, jumper"
+        :total="totalCount"
+      >
+      </el-pagination>
     </div>
     <el-dialog title="添加网址" :visible.sync="addLinkShow">
       <el-form :model="linkForm">
@@ -114,7 +131,12 @@
         </el-form-item>
         <el-form-item label="所属类别" :label-width="formLabelWidth">
           <el-select v-model="linkForm.categoryId" placeholder="请选择类别">
-            <el-option :label="item.name" :value="item.id" v-for="item in categoryList" :key="item.id"></el-option>
+            <el-option
+              :label="item.name"
+              :value="item.id"
+              v-for="item in categoryList"
+              :key="item.id"
+            ></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="网址" :label-width="formLabelWidth">
@@ -142,7 +164,12 @@
         </el-form-item>
         <el-form-item label="所属类别" :label-width="formLabelWidth">
           <el-select v-model="linkForm.categoryId" placeholder="请选择类别">
-            <el-option :label="item.name" :value="item.id" v-for="item in categoryList" :key="item.id"></el-option>
+            <el-option
+              :label="item.name"
+              :value="item.id"
+              v-for="item in categoryList"
+              :key="item.id"
+            ></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="网址" :label-width="formLabelWidth">
@@ -167,13 +194,14 @@
 export default {
   data() {
     return {
+      // 总数据
       linkData: [],
       categoryList: [],
       search: "",
       addLinkShow: false,
       editLinkShow: false,
-      selectCategory: '',
-      pushCategory: '',
+      selectCategory: "",
+      pushCategory: "",
       linkForm: {
         image: "",
         name: "",
@@ -182,13 +210,20 @@ export default {
         url: "",
         hot: false,
         isHot: 0,
-        description: ""
+        description: "",
       },
       formLabelWidth: "120px",
-      currentPage: 1
+      // 默认显示第几页
+      currentPage: 1,
+      // 总条数，根据接口获取数据长度(注意：这里不能为空)
+      totalCount: 1,
+      // 个数选择器（可修改）
+      // pageSizes: [10, 15, 20, 25],
+      // 默认每页显示的条数（可修改）
+      PageSize: 10,
     };
   },
-  mounted() {
+  created() {
     let self = this;
     //加载页面初始化数据
     self.onLoadData();
@@ -197,21 +232,23 @@ export default {
     // 初始化数据
     onLoadData() {
       let self = this;
-      self.axios.all([
-        self.axios.get('http://zhyiwen.com:9003/category?page=1'),
-        self.axios.get('http://zhyiwen.com:9003/link?page=1')
-      ])
-         .then(self.axios.spread(function (cateData, linkData) {
-           // 上面两个请求都完成后，才执行这个回调方法
-           // console.log('category', cateData.data);
-           // console.log('link', linkData.data);
-           self.categoryList = cateData.data.result.records;
-           self.linkData = linkData.data.result.records
-         }))
+      self.axios
+        .all([
+          self.axios.get("http://zhyiwen.com:9003/category?page=1"),
+          self.axios.get("http://zhyiwen.com:9003/link?page=1"),
+        ])
+        .then(
+          self.axios.spread(function(cateData, linkData) {
+            // 上面两个请求都完成后，才执行这个回调方法
+            // console.log('category', cateData.data);
+            // console.log('link', linkData.data);
+            self.categoryList = cateData.data.result.records;
+            self.linkData = linkData.data.result.records;
+          })
+        )
         .catch(function(error) {
           console.log(error);
-        })
-
+        });
     },
     toggleHot(val) {
       this.linkData[val].hot = !this.linkData[val].hot;
@@ -221,114 +258,126 @@ export default {
       let self = this;
       self.editLinkShow = true;
       self.linkForm = row;
-      self.pushCategory = ''
+      self.pushCategory = "";
     },
     handleDelete(index, row) {
       console.log(index, row);
       console.log(row.id);
       let self = this;
-      self.$confirm('此操作将永久删除该分类, 是否继续?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      }).then(() => {
-        let ids = row.id;
-        self.axios.delete('http://zhyiwen.com:9003/link',{
-          data: [ids]
-        }).then(() => {
-          self.$message({
-            message: "删除成功",
-            type: "success",
-            offset: 70
-          });
-          // this.clearData();
-          self.$router.go(0)
+      self
+        .$confirm("此操作将永久删除该分类, 是否继续?", "提示", {
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+          type: "warning",
         })
-                .catch(function() {
-                  self.$message({
-                    message: "删除失败",
-                    type: "error",
-                    offset: 70
-                  });
-                })
-      }).catch(() => {
-        self.$message({
-          type: 'info',
-          message: '已取消删除',
-          offset: 70
+        .then(() => {
+          let ids = row.id;
+          self.axios
+            .delete("http://zhyiwen.com:9003/link", {
+              data: [ids],
+            })
+            .then(() => {
+              self.$message({
+                message: "删除成功",
+                type: "success",
+                offset: 70,
+              });
+              // this.clearData();
+              self.$router.go(0);
+            })
+            .catch(function() {
+              self.$message({
+                message: "删除失败",
+                type: "error",
+                offset: 70,
+              });
+            });
+        })
+        .catch(() => {
+          self.$message({
+            type: "info",
+            message: "已取消删除",
+            offset: 70,
+          });
         });
-      });
     },
+    // 每页显示的条数
     handleSizeChange(val) {
-      console.log(`每页 ${val} 条`);
+      // 改变每页显示的条数
+      this.PageSize = val;
+      // 注意：在改变每页显示的条数时，要将页码显示到第一页
+      this.currentPage = 1;
     },
+    // 显示第几页
     handleCurrentChange(val) {
-      console.log(`当前页: ${val}`);
+      // 改变默认的页数
+      this.currentPage=val
     },
     // 新增网址
-    addLink(){
+    addLink() {
       let self = this;
       self.addLinkShow = false;
-      if(this.linkForm.hot === true){
+      if (this.linkForm.hot === true) {
         this.linkForm.isHot = 1;
-      }else {
+      } else {
         this.linkForm.isHot = 0;
       }
-      self.pushCategory = self.categoryList.filter(function (e) {
+      self.pushCategory = self.categoryList.filter(function(e) {
         return e.id === self.linkForm.categoryId;
       });
       // console.log("取出来的分类是什么"+JSON.stringify(self.pushCategory));
-      self.axios({
-        method: "post",
-        url: "http://zhyiwen.com:9003/link",
-        headers:{
-          'Content-type': 'application/json'
-        },
-        data: {
-          image: self.linkForm.image,
-          name: self.linkForm.name,
-          categoryId: self.linkForm.categoryId,
-          categoryName: self.pushCategory[0].name,
-          url: self.linkForm.url,
-          isHot: self.linkForm.isHot,
-          description: self.linkForm.description
-        },
-      })
+      self
+        .axios({
+          method: "post",
+          url: "http://zhyiwen.com:9003/link",
+          headers: {
+            "Content-type": "application/json",
+          },
+          data: {
+            image: self.linkForm.image,
+            name: self.linkForm.name,
+            categoryId: self.linkForm.categoryId,
+            categoryName: self.pushCategory[0].name,
+            url: self.linkForm.url,
+            isHot: self.linkForm.isHot,
+            description: self.linkForm.description,
+          },
+        })
         .then(() => {
           self.$message({
             message: "提交成功",
             type: "success",
-            offset: 70
+            offset: 70,
           });
           // this.clearData();
-          self.$router.go(0)
+          self.$router.go(0);
         })
         .catch(function() {
           self.$message({
             message: "提交失败",
             type: "error",
-            offset: 70
+            offset: 70,
           });
-        })
+        });
     },
 
     // 修改网址
-    editLink(){
+    editLink() {
       this.editLinkShow = false;
-      if(this.linkForm.hot === true){
+      if (this.linkForm.hot === true) {
         this.linkForm.isHot = 1;
-      }else {
+      } else {
         this.linkForm.isHot = 0;
       }
-      self.pushCategory = self.categoryList.filter(function (e) {
+      self.pushCategory = self.categoryList.filter(function(e) {
         return e.id === self.linkForm.categoryId;
       });
-      console.log("取出来的分类是什么"+JSON.stringify(self.pushCategory));
+      console.log("取出来的分类是什么" + JSON.stringify(self.pushCategory));
       this.axios({
         method: "post",
         url: "http://zhyiwen.com:9003/link",
-        headers:{
-          'Content-type': 'application/json'
+        headers: {
+          "Content-type": "application/json",
         },
         data: {
           image: self.linkForm.image,
@@ -337,28 +386,28 @@ export default {
           categoryName: self.pushCategory[0].name,
           url: self.linkForm.url,
           isHot: self.linkForm.isHot,
-          description: self.linkForm.description
+          description: self.linkForm.description,
         },
       })
-              .then(() => {
-                this.$message({
-                  message: "修改成功",
-                  type: "success",
-                  offset: 70
-                });
-                // this.clearData();
-                // this.$router.go(0)
-              })
-              .catch(function() {
-                this.$message({
-                  message: "修改失败",
-                  type: "error",
-                  offset: 70
-                });
-              })
+        .then(() => {
+          this.$message({
+            message: "修改成功",
+            type: "success",
+            offset: 70,
+          });
+          // this.clearData();
+          // this.$router.go(0)
+        })
+        .catch(function() {
+          this.$message({
+            message: "修改失败",
+            type: "error",
+            offset: 70,
+          });
+        });
     },
     // 清除数据
-    clearData(){
+    clearData() {
       this.linkForm = {
         image: "",
         name: "",
@@ -366,13 +415,11 @@ export default {
         categoryName: "",
         url: "",
         isHot: false,
-        description: ""
+        description: "",
       };
     },
   },
-  watch:{
-
-  }
+  watch: {},
 };
 </script>
 
@@ -382,7 +429,7 @@ export default {
     width: 16px;
     height: 16px;
     vertical-align: middle;
-    border: 1px solid #EBEEF5;
+    border: 1px solid #ebeef5;
     border-radius: 4px;
   }
   .fa-thumbs-up {
@@ -405,5 +452,4 @@ export default {
     }
   }
 }
-
 </style>
