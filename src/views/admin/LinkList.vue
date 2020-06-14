@@ -25,18 +25,6 @@
           :key="item.id"
         ></el-option>
       </el-select>
-      <!-- <el-dropdown>
-        <el-button>
-          类别<i class="el-icon-arrow-down el-icon--right"></i>
-        </el-button>
-        <el-dropdown-menu slot="dropdown">
-          <el-dropdown-item>常用网址</el-dropdown-item>
-          <el-dropdown-item>设计网址</el-dropdown-item>
-          <el-dropdown-item>前端网址</el-dropdown-item>
-          <el-dropdown-item>学习网站</el-dropdown-item>
-          <el-dropdown-item>示例网站</el-dropdown-item>
-        </el-dropdown-menu>
-      </el-dropdown> -->
       <el-button type="primary">搜索</el-button>
       <el-button
         icon="el-icon-plus"
@@ -48,9 +36,7 @@
     </div>
     <div class="table-cont">
       <el-table
-        :data="
-          linkData.slice((currentPage - 1) * PageSize, currentPage * PageSize)
-        "
+        :data="linkData"
         style="width: 100%"
         class="link-table"
         stripe
@@ -220,7 +206,7 @@ export default {
       // 个数选择器（可修改）
       // pageSizes: [10, 15, 20, 25],
       // 默认每页显示的条数（可修改）
-      PageSize: 10,
+      PageSize: 10
     };
   },
   created() {
@@ -235,7 +221,7 @@ export default {
       self.axios
         .all([
           self.axios.get("http://zhyiwen.com:9003/category?page=1"),
-          self.axios.get("http://zhyiwen.com:9003/link?page=1"),
+          self.axios.get("http://zhyiwen.com:9003/link?page="+self.currentPage),
         ])
         .then(
           self.axios.spread(function(cateData, linkData) {
@@ -244,6 +230,7 @@ export default {
             // console.log('link', linkData.data);
             self.categoryList = cateData.data.result.records;
             self.linkData = linkData.data.result.records;
+            self.totalCount = linkData.data.result.total;
           })
         )
         .catch(function(error) {
@@ -311,7 +298,8 @@ export default {
     // 显示第几页
     handleCurrentChange(val) {
       // 改变默认的页数
-      this.currentPage=val
+      this.currentPage=val;
+      this.onLoadData();
     },
     // 新增网址
     addLink() {
@@ -349,7 +337,7 @@ export default {
             type: "success",
             offset: 70,
           });
-          // this.clearData();
+          self.clearData();
           self.$router.go(0);
         })
         .catch(function() {
@@ -369,6 +357,7 @@ export default {
       } else {
         this.linkForm.isHot = 0;
       }
+     let self=this;
       self.pushCategory = self.categoryList.filter(function(e) {
         return e.id === self.linkForm.categoryId;
       });
@@ -380,6 +369,7 @@ export default {
           "Content-type": "application/json",
         },
         data: {
+          id: self.linkForm.id,
           image: self.linkForm.image,
           name: self.linkForm.name,
           categoryId: self.linkForm.categoryId,
