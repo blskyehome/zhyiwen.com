@@ -35,15 +35,10 @@
       >
     </div>
     <div class="table-cont">
-      <el-table
-        :data="linkData"
-        style="width: 100%"
-        class="link-table"
-        stripe
-      >
+      <el-table :data="linkData" style="width: 100%" class="link-table" stripe>
         <el-table-column label="序号" width="50" align="center">
           <template slot-scope="scope">
-            <span>{{ scope.$index+1 }}</span>
+            <span>{{ scope.$index + 1 }}</span>
           </template>
         </el-table-column>
         <el-table-column label="图标" width="120" align="center">
@@ -72,7 +67,7 @@
             <i
               class="link-hot fa"
               :class="scope.row.isHot === 1 ? 'fa-thumbs-up' : 'fa-level-up'"
-              @click="toggleHot(scope.$index)"
+              @click="toggleHot(scope.$index, scope.row)"
             ></i>
           </template>
         </el-table-column>
@@ -102,7 +97,7 @@
         @current-change="handleCurrentChange"
         :current-page.sync="currentPage"
         :page-size="PageSize"
-        layout="total, sizes, prev, pager, next, jumper"
+        layout="total, prev, pager, next, jumper"
         :total="totalCount"
       >
       </el-pagination>
@@ -203,42 +198,103 @@ export default {
       currentPage: 1,
       // 总条数，根据接口获取数据长度(注意：这里不能为空)
       totalCount: 1,
-      // 个数选择器（可修改）
-      // pageSizes: [10, 15, 20, 25],
       // 默认每页显示的条数（可修改）
-      PageSize: 10
+      PageSize: 10,
     };
   },
   created() {
     let self = this;
     //加载页面初始化数据
+    self.getCategory();
     self.onLoadData();
   },
   methods: {
     // 初始化数据
-    onLoadData() {
+    getCategory() {
       let self = this;
-      self.axios
-        .all([
-          self.axios.get("http://zhyiwen.com:9003/category?page=1"),
-          self.axios.get("http://zhyiwen.com:9003/link?page="+self.currentPage),
-        ])
-        .then(
-          self.axios.spread(function(cateData, linkData) {
-            // 上面两个请求都完成后，才执行这个回调方法
-            // console.log('category', cateData.data);
-            // console.log('link', linkData.data);
-            self.categoryList = cateData.data.result.records;
-            self.linkData = linkData.data.result.records;
-            self.totalCount = linkData.data.result.total;
-          })
-        )
+
+      self
+        .axios({
+          method: "get",
+          url: "http://zhyiwen.com:9003/category?page=1",
+          headers: {
+            "Content-type": "application/json",
+          },
+        })
+        .then((response) => {
+          self.categoryList = response.data.result.records;
+        })
         .catch(function(error) {
           console.log(error);
         });
     },
-    toggleHot(val) {
-      this.linkData[val].hot = !this.linkData[val].hot;
+    onLoadData() {
+      let self = this;
+      self
+        .axios({
+          method: "get",
+          url: "http://zhyiwen.com:9003/link?page=" + self.currentPage,
+        })
+        .then((response) => {
+          self.linkData = response.data.result.records;
+          self.totalCount = response.data.result.total;
+        })
+        .catch(function(error) {
+          console.log(error);
+        });
+    },
+    toggleHot(index,row) {
+      let self = this;
+      console.log(index, row);
+      self.linkForm = row;
+      console.log(self.linkForm)
+      self
+        .$confirm("是否确定修改推荐?", "提示", {
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+          type: "warning",
+        })
+        .then(() => {
+          if (self.linkForm.isHot === 0) {
+            self.linkForm.isHot = 1;
+          } else {
+            self.linkForm.isHot = 0;
+          }
+          self.axios({
+            method: "post",
+            url: "http://zhyiwen.com:9003/link",
+            headers: {
+              "Content-type": "application/json",
+            },
+            data: {
+              id: self.linkForm.id,
+              isHot: self.linkForm.isHot
+            },
+          })
+            .then(() => {
+              self.$message({
+                message: "修改成功",
+                type: "success",
+                offset: 70,
+              });
+              self.clearData();
+              self.$router.go(0);
+            })
+            .catch(function() {
+              self.$message({
+                message: "修改失败",
+                type: "error",
+                offset: 70,
+              });
+            });
+        })
+        .catch(() => {
+          self.$message({
+            type: "info",
+            message: "已取消操作",
+            offset: 70,
+          });
+        });
     },
     handleEdit(index, row) {
       console.log(index, row);
@@ -298,7 +354,7 @@ export default {
     // 显示第几页
     handleCurrentChange(val) {
       // 改变默认的页数
-      this.currentPage=val;
+      this.currentPage = val;
       this.onLoadData();
     },
     // 新增网址
@@ -357,7 +413,7 @@ export default {
       } else {
         this.linkForm.isHot = 0;
       }
-     let self=this;
+      let self = this;
       self.pushCategory = self.categoryList.filter(function(e) {
         return e.id === self.linkForm.categoryId;
       });
@@ -385,8 +441,8 @@ export default {
             type: "success",
             offset: 70,
           });
-          // this.clearData();
-          // this.$router.go(0)
+          this.clearData();
+          this.$router.go(0);
         })
         .catch(function() {
           this.$message({

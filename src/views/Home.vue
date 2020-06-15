@@ -143,26 +143,134 @@ export default {
   mounted() {
     let self = this;
     //加载页面初始化数据
-    
   },
   methods: {
     // 初始化数据
+    getCategory() {
+      let self = this;
+
+      self
+        .axios({
+          method: "get",
+          url: "http://zhyiwen.com:9003/category?page=1",
+          headers: {
+            "Content-type": "application/json",
+          },
+        })
+        .then((cateData) => {
+          self.kindList = cateData.data.result.records;
+        })
+        .catch(function(error) {
+          console.log(error);
+        });
+    },
     onLoadData() {
       let self = this;
-      self.axios
-        .all([
-          self.axios.get("http://zhyiwen.com:9003/category?page=1"),
-          self.axios.get("http://zhyiwen.com:9003/link?page=1"),
-        ])
-        .then(
-          self.axios.spread(function(cateData, linkData) {
-            // 上面两个请求都完成后，才执行这个回调方法
-            console.log("category", cateData.data);
-            console.log("link", linkData.data);
-            self.kindList = cateData.data.result.records;
-            self.linkData = linkData.data.result.records;
-          })
-        )
+      self
+        .axios({
+          method: "get",
+          url: "http://zhyiwen.com:9003/link?page=1",
+        })
+        .then((linkData) => {
+          self.linkData = self.linkData.concat(linkData.data.result.records);
+          // console.log("category", self.kindList);
+          // console.log("link", self.linkData);
+          self.linkKind();
+          self.hotLinkData = self.linkData.filter(function(e) {
+            // console.log(e);
+            return e.isHot == 1;
+          });
+        })
+        .catch(function(error) {
+          console.log(error);
+        });
+      self
+        .axios({
+          method: "get",
+          url: "http://zhyiwen.com:9003/link?page=2",
+        })
+        .then((linkData) => {
+          self.linkData = self.linkData.concat(linkData.data.result.records);
+          // console.log("category", self.kindList);
+          // console.log("link", self.linkData);
+          self.linkKind();
+          self.hotLinkData = self.linkData.filter(function(e) {
+            // console.log(e);
+            return e.isHot == 1;
+          });
+        })
+        .catch(function(error) {
+          console.log(error);
+        });
+      self
+        .axios({
+          method: "get",
+          url: "http://zhyiwen.com:9003/link?page=3",
+        })
+        .then((linkData) => {
+          self.linkData = self.linkData.concat(linkData.data.result.records);
+          // console.log("category", self.kindList);
+          // console.log("link", self.linkData);
+          self.linkKind();
+          self.hotLinkData = self.linkData.filter(function(e) {
+            // console.log(e);
+            return e.isHot == 1;
+          });
+        })
+        .catch(function(error) {
+          console.log(error);
+        });
+      self
+        .axios({
+          method: "get",
+          url: "http://zhyiwen.com:9003/link?page=4",
+        })
+        .then((linkData) => {
+          self.linkData = self.linkData.concat(linkData.data.result.records);
+          // console.log("category", self.kindList);
+          // console.log("link", self.linkData);
+          self.linkKind();
+          self.hotLinkData = self.linkData.filter(function(e) {
+            // console.log(e);
+            return e.isHot == 1;
+          });
+        })
+        .catch(function(error) {
+          console.log(error);
+        });
+      self
+        .axios({
+          method: "get",
+          url: "http://zhyiwen.com:9003/link?page=5",
+        })
+        .then((linkData) => {
+          self.linkData = self.linkData.concat(linkData.data.result.records);
+          // console.log("category", self.kindList);
+          // console.log("link", self.linkData);
+          self.linkKind();
+          self.hotLinkData = self.linkData.filter(function(e) {
+            // console.log(e);
+            return e.isHot == 1;
+          });
+        })
+        .catch(function(error) {
+          console.log(error);
+        });
+      self
+        .axios({
+          method: "get",
+          url: "http://zhyiwen.com:9003/link?page=6",
+        })
+        .then((linkData) => {
+          self.linkData = self.linkData.concat(linkData.data.result.records);
+          // console.log("category", self.kindList);
+          // console.log("link", self.linkData);
+          self.linkKind();
+          self.hotLinkData = self.linkData.filter(function(e) {
+            // console.log(e);
+            return e.isHot == 1;
+          });
+        })
         .catch(function(error) {
           console.log(error);
         });
@@ -179,21 +287,17 @@ export default {
       for (let i = 0; i < self.kindList.length; i++) {
         let code = self.kindList[i].id;
         let kindLink = self.linkData.filter(function(e) {
-          return e.id == code;
+          return e.categoryId == code;
         });
         self.kindList[i].links = kindLink;
+        console.log("遍历" + code);
       }
-      console.log(self.kindList);
     },
   },
   created: function() {
     let self = this;
+    self.getCategory();
     self.onLoadData();
-    self.linkKind();
-    self.hotLinkData = self.linkData.filter(function(e) {
-      // console.log(e);
-      return e.isHot == 1;
-    });
   },
   computed: {
     showKind: function() {
@@ -205,7 +309,6 @@ export default {
     },
   },
   components: {
-    // HelloWorld
     HomePanel,
   },
 };
@@ -228,7 +331,7 @@ export default {
     image: url(../assets/bg.jpg);
     size: 1920px auto;
     repeat: no-repeat;
-    position: center;
+    position: center bottom;
     attachment: fixed;
   }
   .bg-top {
@@ -249,6 +352,14 @@ export default {
   padding: 30px 30px 10px 30px;
   .link-info {
     padding: 0 20px;
+    .hot-link {
+      span {
+        display: none;
+        @media only screen and (min-width: 768px) {
+          display: inline-block;
+        }
+      }
+    }
   }
 }
 .hot-link {
@@ -267,18 +378,19 @@ export default {
     // border-radius: 50%;
   }
   span {
-    display: none;
     color: rgb(96, 98, 102);
+    margin-left: 32px;
     font-size: 14px;
     line-height: 26px;
-    @media only screen and (min-width: 768px) {
-      display: inline-block;
-      margin-left: 32px;
-    }
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    word-break: keep-all;
+    overflow: hidden;
   }
   .desc {
     color: #909399;
     font-size: 12px;
+    height: 32px;
     overflow: hidden;
     text-overflow: ellipsis;
     display: -webkit-box;
@@ -302,6 +414,16 @@ export default {
   }
   &.link-top {
     height: 26px;
+    text-align: center;
+    img {
+      position: initial;
+    }
+    @media only screen and (min-width: 768px) {
+      text-align: left;
+      img {
+        position: absolute;
+      }
+    }
   }
 }
 </style>
