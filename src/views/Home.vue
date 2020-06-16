@@ -24,6 +24,7 @@
                 v-model="search"
                 placeholder="请输入关键词搜索"
                 class="input-with-select"
+                @keyup.enter.native="openSearchPage"
               >
                 <template slot="prepend">
                   <span
@@ -108,7 +109,7 @@ export default {
           logo: "",
           title: "百度",
           name: "baidu",
-          url: "http://www.baidu.com/s?wd=",
+          url: "http://www.baidu.com/baidu?word=",
         },
         {
           logo: "",
@@ -133,7 +134,7 @@ export default {
         logo: "",
         title: "百度",
         name: "baidu",
-        url: "http://www.baidu.com/s?wd=",
+        url: "http://www.baidu.com/baidu?word=",
       },
       kindList: [],
       linkData: [],
@@ -290,7 +291,6 @@ export default {
           return e.categoryId == code;
         });
         self.kindList[i].links = kindLink;
-        console.log("遍历" + code);
       }
     },
   },
