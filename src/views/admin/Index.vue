@@ -35,14 +35,9 @@
 <script>
 import { Chart } from "@antv/g2";
 export default {
-  mounted() {
-    this.chart1();
-    this.chart2();
-    this.chart3();
-  },
-  methods: {
-    chart1() {
-      const data = [
+  data() {
+    return{
+      chartData1:[
         { month: "2:00", city: "昨天", temperature: 18 },
         { month: "2:00", city: "今天", temperature: 10 },
         { month: "4:00", city: "昨天", temperature: 13 },
@@ -58,16 +53,44 @@ export default {
         { month: "14:00", city: "昨天", temperature: 14 },
         { month: "14:00", city: "今天", temperature: 25 },
         { month: "16:00", city: "昨天", temperature: 18 },
-        // { month: "16:00", city: "今天", temperature: 11 },
-        { month: "18:00", city: "昨天", temperature: 21 },
-        // { month: "18:00", city: "今天", temperature: 15 },
-        { month: "20:00", city: "昨天", temperature: 25 },
-        // { month: "20:00", city: "今天", temperature: 17 },
-        { month: "22:00", city: "昨天", temperature: 26 },
-        // { month: "22:00", city: "今天", temperature: 16 },
-        { month: "24:00", city: "昨天", temperature: 23 },
-        // { month: "24:00", city: "今天", temperature: 14 },
-      ];
+        { month: "16:00", city: "今天", temperature: 20 },
+        { month: "18:00", city: "昨天", temperature: 16 },
+        { month: "18:00", city: "今天", temperature: 18 },
+        { month: "20:00", city: "昨天", temperature: 13 },
+        { month: "20:00", city: "今天", temperature: 17 },
+        { month: "22:00", city: "昨天", temperature: 12 },
+        { month: "22:00", city: "今天", temperature: 14 },
+        { month: "24:00", city: "昨天", temperature: 10 },
+        { month: "24:00", city: "今天", temperature: 12 },
+      ],
+      chartData2:[
+        { year: "星期一", sales: 38 },
+        { year: "星期二", sales: 52 },
+        { year: "星期三", sales: 61 },
+        { year: "星期四", sales: 85 },
+        { year: "星期五", sales: 48 },
+        { year: "星期六", sales: 10 },
+        { year: "星期日", sales: 2 },
+      ],
+      chartData3:[
+        { item: "常用网站", count: 20, percent: 0.3175 },
+        { item: "常用插件", count: 4, percent: 0.0635 },
+        { item: "工具", count: 8, percent: 0.127 },
+        { item: "设计相关", count: 7, percent: 0.1111 },
+        { item: "框架", count: 7, percent: 0.1111 },
+        { item: "文档", count: 8, percent: 0.127 },
+        { item: "学习网站", count: 9, percent: 0.1428 },
+      ],
+    }
+  },
+  mounted() {
+    this.chart1();
+    this.chart2();
+    this.chart3();
+  },
+  methods: {
+    chart1() {
+      const data = this.chartData1;
 
       const chart = new Chart({
         container: "option1",
@@ -119,15 +142,7 @@ export default {
       chart.render();
     },
     chart2() {
-      const data = [
-        { year: "星期一", sales: 38 },
-        { year: "星期二", sales: 52 },
-        { year: "星期三", sales: 61 },
-        { year: "星期四", sales: 85 },
-        { year: "星期五", sales: 48 },
-        { year: "星期六", sales: 10 },
-        { year: "星期日", sales: 2 },
-      ];
+      const data = this.chartData2;
       const chart = new Chart({
         container: "option2",
         autoFit: true,
@@ -149,15 +164,7 @@ export default {
       chart.render();
     },
     chart3() {
-      const data = [
-        { item: "常用网站", count: 20, percent: 0.3175 },
-        { item: "常用插件", count: 4, percent: 0.0635 },
-        { item: "工具", count: 8, percent: 0.127 },
-        { item: "设计相关", count: 7, percent: 0.1111 },
-        { item: "框架", count: 7, percent: 0.1111 },
-        { item: "文档", count: 8, percent: 0.127 },
-        { item: "学习网站", count: 9, percent: 0.1428 },
-      ];
+      const data = this.chartData3;
 
       const chart = new Chart({
         container: "option3",
@@ -300,5 +307,8 @@ export default {
 }
 .box-card {
   margin-bottom: 20px;
+  .el-card__header {
+    padding: 10px 20px;
+  }
 }
 </style>

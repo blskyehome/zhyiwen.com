@@ -59,6 +59,13 @@ export default {
       isCollapse: false
     };
   },
+  created() {
+    var screenWidth = document.body.clientWidth;
+    console.log(screenWidth);
+    if(screenWidth < 992){
+      this.isCollapse = true;
+    }
+  },
   methods: {
     handleOpen(key, keyPath) {
       console.log(key, keyPath);

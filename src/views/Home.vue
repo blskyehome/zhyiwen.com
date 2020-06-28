@@ -176,29 +176,31 @@ export default {
         .then((response) => {
           self.totalCount = response.data.result.total;
           self.dataPage = Math.ceil(self.totalCount / 10);
-          console.log(self.dataPage);
+          console.log("page:" + self.dataPage);
+          for (var i = 1; i <= self.dataPage; i++) {
+            self
+              .axios({
+                method: "get",
+                url: "http://zhyiwen.com:9003/link?page=" + i,
+              })
+              .then((linkData) => {
+                self.linkData = self.linkData.concat(
+                  linkData.data.result.records
+                );
+                self.linkKind();
+                self.hotLinkData = self.linkData.filter(function(e) {
+                  // console.log(e);
+                  return e.isHot == 1;
+                });
+              })
+              .catch(function(error) {
+                console.log(error);
+              });
+          }
         })
         .catch(function(error) {
           console.log(error);
         });
-      for (var i = 1; i <= self.dataPage; i++) {
-        self
-          .axios({
-            method: "get",
-            url: "http://zhyiwen.com:9003/link?page=" + i,
-          })
-          .then((linkData) => {
-            self.linkData = self.linkData.concat(linkData.data.result.records);
-            self.linkKind();
-            self.hotLinkData = self.linkData.filter(function(e) {
-              console.log(e);
-              return e.isHot == 1;
-            });
-          })
-          .catch(function(error) {
-            console.log(error);
-          });
-      }
     },
     toggleSearch: function(item) {
       this.activeSearchSelect = item;
@@ -324,6 +326,10 @@ export default {
     white-space: inherit;
     transition: all 0.3s;
     margin: 0 0 0 32px;
+    display: none;
+    @media only screen and (min-width: 768px) {
+      display: block;
+    }
     i {
       font-style: normal;
     }
