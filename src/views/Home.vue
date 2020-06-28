@@ -98,7 +98,6 @@
 
 <script>
 import HomePanel from "@/components/HomePanel.vue";
-import link from "@/assets/linkTest.js";
 export default {
   name: "home",
   data: function() {
@@ -139,10 +138,12 @@ export default {
       kindList: [],
       linkData: [],
       hotLinkData: [],
+      totalCount: 1,
+      dataPage: 0,
     };
   },
   mounted() {
-    let self = this;
+    // let self = this;
     //加载页面初始化数据
   },
   methods: {
@@ -172,109 +173,32 @@ export default {
           method: "get",
           url: "http://zhyiwen.com:9003/link?page=1",
         })
-        .then((linkData) => {
-          self.linkData = self.linkData.concat(linkData.data.result.records);
-          // console.log("category", self.kindList);
-          // console.log("link", self.linkData);
-          self.linkKind();
-          self.hotLinkData = self.linkData.filter(function(e) {
-            // console.log(e);
-            return e.isHot == 1;
-          });
+        .then((response) => {
+          self.totalCount = response.data.result.total;
+          self.dataPage = Math.ceil(self.totalCount / 10);
+          console.log(self.dataPage);
         })
         .catch(function(error) {
           console.log(error);
         });
-      self
-        .axios({
-          method: "get",
-          url: "http://zhyiwen.com:9003/link?page=2",
-        })
-        .then((linkData) => {
-          self.linkData = self.linkData.concat(linkData.data.result.records);
-          // console.log("category", self.kindList);
-          // console.log("link", self.linkData);
-          self.linkKind();
-          self.hotLinkData = self.linkData.filter(function(e) {
-            // console.log(e);
-            return e.isHot == 1;
+      for (var i = 1; i <= self.dataPage; i++) {
+        self
+          .axios({
+            method: "get",
+            url: "http://zhyiwen.com:9003/link?page=" + i,
+          })
+          .then((linkData) => {
+            self.linkData = self.linkData.concat(linkData.data.result.records);
+            self.linkKind();
+            self.hotLinkData = self.linkData.filter(function(e) {
+              console.log(e);
+              return e.isHot == 1;
+            });
+          })
+          .catch(function(error) {
+            console.log(error);
           });
-        })
-        .catch(function(error) {
-          console.log(error);
-        });
-      self
-        .axios({
-          method: "get",
-          url: "http://zhyiwen.com:9003/link?page=3",
-        })
-        .then((linkData) => {
-          self.linkData = self.linkData.concat(linkData.data.result.records);
-          // console.log("category", self.kindList);
-          // console.log("link", self.linkData);
-          self.linkKind();
-          self.hotLinkData = self.linkData.filter(function(e) {
-            // console.log(e);
-            return e.isHot == 1;
-          });
-        })
-        .catch(function(error) {
-          console.log(error);
-        });
-      self
-        .axios({
-          method: "get",
-          url: "http://zhyiwen.com:9003/link?page=4",
-        })
-        .then((linkData) => {
-          self.linkData = self.linkData.concat(linkData.data.result.records);
-          // console.log("category", self.kindList);
-          // console.log("link", self.linkData);
-          self.linkKind();
-          self.hotLinkData = self.linkData.filter(function(e) {
-            // console.log(e);
-            return e.isHot == 1;
-          });
-        })
-        .catch(function(error) {
-          console.log(error);
-        });
-      self
-        .axios({
-          method: "get",
-          url: "http://zhyiwen.com:9003/link?page=5",
-        })
-        .then((linkData) => {
-          self.linkData = self.linkData.concat(linkData.data.result.records);
-          // console.log("category", self.kindList);
-          // console.log("link", self.linkData);
-          self.linkKind();
-          self.hotLinkData = self.linkData.filter(function(e) {
-            // console.log(e);
-            return e.isHot == 1;
-          });
-        })
-        .catch(function(error) {
-          console.log(error);
-        });
-      self
-        .axios({
-          method: "get",
-          url: "http://zhyiwen.com:9003/link?page=6",
-        })
-        .then((linkData) => {
-          self.linkData = self.linkData.concat(linkData.data.result.records);
-          // console.log("category", self.kindList);
-          // console.log("link", self.linkData);
-          self.linkKind();
-          self.hotLinkData = self.linkData.filter(function(e) {
-            // console.log(e);
-            return e.isHot == 1;
-          });
-        })
-        .catch(function(error) {
-          console.log(error);
-        });
+      }
     },
     toggleSearch: function(item) {
       this.activeSearchSelect = item;
