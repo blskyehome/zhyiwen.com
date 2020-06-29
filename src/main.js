@@ -7,6 +7,9 @@ import store from './store'
 import './plugins/element.js'
 import './assets/element-variables.scss'
 import 'font-awesome/scss/font-awesome.scss'
+import VueParticles from 'vue-particles'
+
+Vue.use(VueParticles) 
 
 Vue.use(VueAxios, axios)
 
