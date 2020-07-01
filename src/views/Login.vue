@@ -11,10 +11,10 @@
       :linesWidth="1"
       :lineLinked="true"
       :lineOpacity="0.4"
-      :linesDistance="150"
+      :linesDistance="100"
       :moveSpeed="4"
       :hoverEffect="true"
-      hoverMode="repulse"
+      hoverMode="grab"
       :clickEffect="true"
       clickMode="push"
     >
@@ -52,7 +52,7 @@ export default {
   position: relative;
   height: 100%;
   background: #05cfa2;
-  background: linear-gradient(to bottom, #05cfa2, #b4ffe2);
+  background: radial-gradient(#b4ffe2, #05cfa2);
   overflow: hidden;
 }
 .login-bg {
