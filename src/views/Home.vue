@@ -15,30 +15,19 @@
                 :key="item.name"
                 :class="{ active: item.name === activeSearchSelect.name }"
                 class="search-tab-item"
-              >
-                {{ item.title }}
-              </li>
+              >{{ item.title }}</li>
             </ul>
-            <form :action="activeSearchSelect.url" target="_blank">
-              <el-input
-                v-model="search"
-                placeholder="请输入关键词搜索"
-                class="input-with-select"
-                @keyup.enter.native="openSearchPage"
-              >
-                <template slot="prepend">
-                  <span
-                    class="search-logo"
-                    :class="activeSearchSelect.name"
-                  ></span>
-                </template>
-                <el-button
-                  slot="append"
-                  icon="el-icon-search"
-                  @click="openSearchPage"
-                ></el-button>
-              </el-input>
-            </form>
+            <el-input
+              v-model="search"
+              placeholder="请输入关键词搜索"
+              class="input-with-select"
+              @keyup.enter.native="openSearchPage"
+            >
+              <template slot="prepend">
+                <span class="search-logo" :class="activeSearchSelect.name"></span>
+              </template>
+              <el-button slot="append" icon="el-icon-search" @click="openSearchPage"></el-button>
+            </el-input>
           </div>
         </div>
         <div class="link-cont">
@@ -55,8 +44,8 @@
                   :key="index"
                 >
                   <a class="hot-link link-top" :href="hot.url" target="_blank">
-                    <img :src="hot.image" alt="" v-if="hot.image" />
-                    <img src="../assets/testImg.png" alt="" v-else />
+                    <img :src="hot.image" alt v-if="hot.image" />
+                    <img src="../assets/testImg.png" alt v-else />
                     <span>{{ hot.name }}</span>
                   </a>
                 </el-col>
@@ -80,8 +69,8 @@
                 :key="index"
               >
                 <a class="hot-link" :href="link.url" target="_blank">
-                  <img :src="link.image" alt="" v-if="link.image" />
-                  <img src="../assets/testImg.png" alt="" v-else />
+                  <img :src="link.image" alt v-if="link.image" />
+                  <img src="../assets/testImg.png" alt v-else />
                   <span>{{ link.name }}</span>
                   <p class="desc">
                     <i v-show="link.description">{{ link.description }}</i>
@@ -108,38 +97,38 @@ export default {
           logo: "",
           title: "百度",
           name: "baidu",
-          url: "http://www.baidu.com/baidu?word=",
+          url: "http://www.baidu.com/baidu?word="
         },
         {
           logo: "",
           title: "必应",
           name: "bing",
-          url: "https://cn.bing.com/search?q=",
+          url: "https://cn.bing.com/search?q="
         },
         {
           logo: "",
           title: "花瓣网",
           name: "huaban",
-          url: "https://huaban.com/search/?q=",
+          url: "https://huaban.com/search/?q="
         },
         {
           logo: "",
           title: "阿里图标",
           name: "iconfont",
-          url: "https://www.iconfont.cn/search/index?q=",
-        },
+          url: "https://www.iconfont.cn/search/index?q="
+        }
       ],
       activeSearchSelect: {
         logo: "",
         title: "百度",
         name: "baidu",
-        url: "http://www.baidu.com/baidu?word=",
+        url: "http://www.baidu.com/baidu?word="
       },
       kindList: [],
       linkData: [],
       hotLinkData: [],
       totalCount: 1,
-      dataPage: 0,
+      dataPage: 0
     };
   },
   mounted() {
@@ -156,10 +145,10 @@ export default {
           method: "get",
           url: "http://zhyiwen.com:9003/category?page=1",
           headers: {
-            "Content-type": "application/json",
-          },
+            "Content-type": "application/json"
+          }
         })
-        .then((cateData) => {
+        .then(cateData => {
           self.kindList = cateData.data.result.records;
         })
         .catch(function(error) {
@@ -171,9 +160,9 @@ export default {
       self
         .axios({
           method: "get",
-          url: "http://zhyiwen.com:9003/link?page=1",
+          url: "http://zhyiwen.com:9003/link?page=1"
         })
-        .then((response) => {
+        .then(response => {
           self.totalCount = response.data.result.total;
           self.dataPage = Math.ceil(self.totalCount / 10);
           console.log("page:" + self.dataPage);
@@ -181,9 +170,9 @@ export default {
             self
               .axios({
                 method: "get",
-                url: "http://zhyiwen.com:9003/link?page=" + i,
+                url: "http://zhyiwen.com:9003/link?page=" + i
               })
-              .then((linkData) => {
+              .then(linkData => {
                 self.linkData = self.linkData.concat(
                   linkData.data.result.records
                 );
@@ -218,7 +207,7 @@ export default {
         });
         self.kindList[i].links = kindLink;
       }
-    },
+    }
   },
   created: function() {
     let self = this;
@@ -232,11 +221,11 @@ export default {
           return item;
         }
       });
-    },
+    }
   },
   components: {
-    HomePanel,
-  },
+    HomePanel
+  }
 };
 </script>
 
