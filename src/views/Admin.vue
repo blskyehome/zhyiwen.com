@@ -2,11 +2,33 @@
   <el-container class="admin">
     <el-header class="admin-header">
       <div class="admin-logo">
-        <i
-          class="el-icon-eleme"
-          style="font-size: 28px; vertical-align: sub;"
-        ></i>
+        <i class="el-icon-eleme" style="font-size: 28px; vertical-align: sub;"></i>
         管理后台
+      </div>
+      <div class="admin-manage">
+        <div class="admin-btn-group">
+          <!-- <el-badge :value="11" :max="10" class="item">
+            <el-button
+              class="admin-head-ico"
+              type="primary"
+              icon="el-icon-message-solid"
+              size="small"
+              circle
+            ></el-button>
+          </el-badge>-->
+          <el-button
+            class="admin-head-ico"
+            type="primary"
+            icon="el-icon-s-tools"
+            size="small"
+            circle
+          ></el-button>
+        </div>
+        <div class="user-img">
+          <el-avatar src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"></el-avatar>
+          <!-- <el-avatar>译文</el-avatar> -->
+          <span class="user-name">抓耗子的猫</span>
+        </div>
       </div>
     </el-header>
     <el-container class="admin-main">
@@ -62,7 +84,7 @@ export default {
   created() {
     var screenWidth = document.body.clientWidth;
     console.log(screenWidth);
-    if(screenWidth < 992){
+    if (screenWidth < 992) {
       this.isCollapse = true;
     }
   },
@@ -95,6 +117,34 @@ export default {
     //   margin-left: 20px;
     color: #fff;
     font-size: 16px;
+  }
+  .admin-manage {
+    float: right;
+    .user-img {
+      position: relative;
+      float: left;
+      margin-left: 10px;
+      .el-avatar {
+        position: absolute;
+        top: 10px;
+        left: 0;
+      }
+      .user-name {
+        padding-left: 50px;
+        font-size: 14px;
+        line-height: 60px;
+        color: #fff;
+      }
+    }
+    .admin-btn-group {
+      float: left;
+      margin-top: 15px;
+    }
+    .admin-head-ico {
+      background: rgba($color: #fff, $alpha: 0.2);
+      border: none;
+      margin-left: 10px;
+    }
   }
 }
 .el-aside {
@@ -129,7 +179,7 @@ export default {
 .el-main {
   background-color: #fdfdfd;
 }
-.el-breadcrumb{
+.el-breadcrumb {
   margin-bottom: 15px;
 }
 .condition-cont {
