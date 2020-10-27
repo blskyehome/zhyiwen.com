@@ -39,13 +39,13 @@
 
         <el-menu
           router
-          default-active="1-4-1"
+          default-active="aindex"
           class="el-menu-vertical-demo"
           @open="handleOpen"
           @close="handleClose"
           :collapse="isCollapse"
         >
-          <el-menu-item index="aindex" select>
+          <el-menu-item index="aindex">
             <i class="fa fa-dashboard"></i>
             <span slot="title">首页</span>
           </el-menu-item>

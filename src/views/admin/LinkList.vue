@@ -11,28 +11,12 @@
         prefix-icon="el-icon-search"
         v-model="search"
         class="search-input"
-      >
-      </el-input>
-      <el-select
-        v-model="selectCategory"
-        placeholder="请选择类别"
-        class="search-select"
-      >
-        <el-option
-          :label="item.name"
-          :value="item.id"
-          v-for="item in categoryList"
-          :key="item.id"
-        ></el-option>
+      ></el-input>
+      <el-select v-model="selectCategory" placeholder="请选择类别" class="search-select">
+        <el-option :label="item.name" :value="item.id" v-for="item in categoryList" :key="item.id"></el-option>
       </el-select>
       <el-button type="primary">搜索</el-button>
-      <el-button
-        icon="el-icon-plus"
-        type="primary"
-        class="link-add"
-        @click="addLinkShow = true"
-        >新增</el-button
-      >
+      <el-button icon="el-icon-plus" type="primary" class="link-add" @click="addLinkShow = true">新增</el-button>
     </div>
     <div class="table-cont">
       <el-table :data="linkData" style="width: 100%" class="link-table" stripe>
@@ -43,23 +27,19 @@
         </el-table-column>
         <el-table-column label="图标" width="120" align="center">
           <template slot-scope="scope">
-            <img :src="scope.row.image" alt="" class="link-icon" />
+            <img :src="scope.row.image" alt class="link-icon" v-if="scope.row.image" />
+            <img src="../../assets/noImg.png" alt="" class="link-test-icon" v-else>
           </template>
         </el-table-column>
-        <el-table-column prop="name" label="名称" width="150" align="center">
-        </el-table-column>
-        <el-table-column
-          prop="categoryName"
-          label="类别"
-          width="120"
-          align="center"
-        >
-        </el-table-column>
+        <el-table-column prop="name" label="名称" width="150" align="center"></el-table-column>
+        <el-table-column prop="categoryName" label="类别" width="120" align="center"></el-table-column>
         <el-table-column label="网址" header-align="center">
           <template slot-scope="scope">
-            <a :href="scope.row.url" target="_blank" class="link-url">{{
+            <a :href="scope.row.url" target="_blank" class="link-url">
+              {{
               scope.row.url
-            }}</a>
+              }}
+            </a>
           </template>
         </el-table-column>
         <el-table-column label="推荐" width="50" align="center">
@@ -99,16 +79,20 @@
         :page-size="PageSize"
         layout="total, prev, pager, next, jumper"
         :total="totalCount"
-      >
-      </el-pagination>
+      ></el-pagination>
     </div>
     <el-dialog title="添加网址" :visible.sync="addLinkShow">
       <el-form :model="linkForm">
         <el-form-item label="网址名称" :label-width="formLabelWidth">
           <el-input v-model="linkForm.name" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item label="网址图片" :label-width="formLabelWidth">
-          <el-input v-model="linkForm.image" autocomplete="off"></el-input>
+        <el-form-item label="网址图片" :label-width="formLabelWidth" class="img-show">
+          <el-input v-model="linkForm.image" autocomplete="off">
+            <el-button type="primary" slot="append">
+              上传
+              <i class="el-icon-upload el-icon--right"></i>
+            </el-button>
+          </el-input>
         </el-form-item>
         <el-form-item label="所属类别" :label-width="formLabelWidth">
           <el-select v-model="linkForm.categoryId" placeholder="请选择类别">
@@ -224,7 +208,7 @@ export default {
         .then((response) => {
           self.categoryList = response.data.result.records;
         })
-        .catch(function(error) {
+        .catch(function (error) {
           console.log(error);
         });
     },
@@ -239,15 +223,15 @@ export default {
           self.linkData = response.data.result.records;
           self.totalCount = response.data.result.total;
         })
-        .catch(function(error) {
+        .catch(function (error) {
           console.log(error);
         });
     },
-    toggleHot(index,row) {
+    toggleHot(index, row) {
       let self = this;
       console.log(index, row);
       self.linkForm = row;
-      console.log(self.linkForm)
+      console.log(self.linkForm);
       self
         .$confirm("是否确定修改推荐?", "提示", {
           confirmButtonText: "确定",
@@ -260,17 +244,18 @@ export default {
           } else {
             self.linkForm.isHot = 0;
           }
-          self.axios({
-            method: "post",
-            url: "http://zhyiwen.com:9003/link",
-            headers: {
-              "Content-type": "application/json",
-            },
-            data: {
-              id: self.linkForm.id,
-              isHot: self.linkForm.isHot
-            },
-          })
+          self
+            .axios({
+              method: "post",
+              url: "http://zhyiwen.com:9003/link",
+              headers: {
+                "Content-type": "application/json",
+              },
+              data: {
+                id: self.linkForm.id,
+                isHot: self.linkForm.isHot,
+              },
+            })
             .then(() => {
               self.$message({
                 message: "修改成功",
@@ -280,7 +265,7 @@ export default {
               self.clearData();
               self.$router.go(0);
             })
-            .catch(function() {
+            .catch(function () {
               self.$message({
                 message: "修改失败",
                 type: "error",
@@ -328,7 +313,7 @@ export default {
               // this.clearData();
               self.$router.go(0);
             })
-            .catch(function() {
+            .catch(function () {
               self.$message({
                 message: "删除失败",
                 type: "error",
@@ -366,7 +351,7 @@ export default {
       } else {
         this.linkForm.isHot = 0;
       }
-      self.pushCategory = self.categoryList.filter(function(e) {
+      self.pushCategory = self.categoryList.filter(function (e) {
         return e.id === self.linkForm.categoryId;
       });
       // console.log("取出来的分类是什么"+JSON.stringify(self.pushCategory));
@@ -396,7 +381,7 @@ export default {
           self.clearData();
           self.$router.go(0);
         })
-        .catch(function() {
+        .catch(function () {
           self.$message({
             message: "提交失败",
             type: "error",
@@ -414,7 +399,7 @@ export default {
         this.linkForm.isHot = 0;
       }
       let self = this;
-      self.pushCategory = self.categoryList.filter(function(e) {
+      self.pushCategory = self.categoryList.filter(function (e) {
         return e.id === self.linkForm.categoryId;
       });
       console.log("取出来的分类是什么" + JSON.stringify(self.pushCategory));
@@ -444,7 +429,7 @@ export default {
           this.clearData();
           this.$router.go(0);
         })
-        .catch(function() {
+        .catch(function () {
           this.$message({
             message: "修改失败",
             type: "error",
@@ -478,6 +463,11 @@ export default {
     border: 1px solid #ebeef5;
     border-radius: 4px;
   }
+  .link-test-icon {
+    width: 18px;
+    height: 18px;
+    vertical-align: middle;
+  }
   .fa-thumbs-up {
     color: #5ddcb6;
   }
@@ -495,6 +485,17 @@ export default {
     cursor: pointer;
     &:hover {
       text-decoration: underline;
+    }
+  }
+}
+.img-show {
+  .el-input-group__append {
+    .el-button--primary {
+      border-top-left-radius: 0;
+      border-bottom-left-radius: 0;
+      background: #5ddcb6;
+      color: #fff;
+      border-color: #5ddcb6;
     }
   }
 }
