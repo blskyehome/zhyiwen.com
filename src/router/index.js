@@ -26,26 +26,31 @@ const routes = [
     name: 'admin',
     component: Admin,
     redirect: 'admin/aindex',
+    meta: { requiresAuth: true },
     children: [
       {
         path: 'aindex',
         name: 'aindex',
-        component: AdminIndex
+        component: AdminIndex,
+        meta: { requiresAuth: true }
       },
       {
         path: 'alinklist',
         name: 'alinklist',
-        component: AdminLinkList
+        component: AdminLinkList,
+        meta: { requiresAuth: true }
       },
       {
         path: 'ahotsort',
         name: 'ahotsort',
-        component: AdminHotSort
+        component: AdminHotSort,
+        meta: { requiresAuth: true }
       },
       {
         path: 'acategory',
         name: 'acategory',
-        component: AdminCategory
+        component: AdminCategory,
+        meta: { requiresAuth: true }
       }
     ]
   }

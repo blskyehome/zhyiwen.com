@@ -108,7 +108,7 @@
           <el-input v-model="linkForm.url" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="是否推荐" :label-width="formLabelWidth">
-          <el-switch v-model="linkForm.hot"></el-switch>
+          <el-switch v-model="linkForm.hotValue"></el-switch>
         </el-form-item>
         <el-form-item label="链接详情" :label-width="formLabelWidth">
           <el-input type="textarea" v-model="linkForm.description"></el-input>
@@ -141,7 +141,7 @@
           <el-input v-model="linkForm.url" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="是否推荐" :label-width="formLabelWidth">
-          <el-switch v-model="linkForm.hot"></el-switch>
+          <el-switch v-model="linkForm.hotValue"></el-switch>
         </el-form-item>
         <el-form-item label="链接详情" :label-width="formLabelWidth">
           <el-input type="textarea" v-model="linkForm.description"></el-input>
@@ -173,7 +173,7 @@ export default {
         categoryId: "",
         categoryName: "",
         url: "",
-        hot: false,
+        hotValue: false,
         isHot: 0,
         description: "",
       },
@@ -191,6 +191,12 @@ export default {
     //加载页面初始化数据
     self.getCategory();
     self.onLoadData();
+  },
+  updated() {
+    var self = this;
+					self.$nextTick(function(){
+            
+          })
   },
   methods: {
     // 初始化数据
@@ -282,15 +288,22 @@ export default {
         });
     },
     handleEdit(index, row) {
-      console.log(index, row);
+      // console.log(index, row);
       let self = this;
       self.editLinkShow = true;
       self.linkForm = row;
+      console.log("1======="+self.linkForm.hotValue);
+      if (self.linkForm.isHot === 1) {
+        self.linkForm.hotValue = true;
+      } else {
+        self.linkForm.hotValue === false;
+      }
+      console.log("2======="+self.linkForm.hotValue);
       self.pushCategory = "";
     },
     handleDelete(index, row) {
-      console.log(index, row);
-      console.log(row.id);
+      // console.log(index, row);
+      // console.log(row.id);
       let self = this;
       self
         .$confirm("此操作将永久删除该分类, 是否继续?", "提示", {
@@ -346,7 +359,7 @@ export default {
     addLink() {
       let self = this;
       self.addLinkShow = false;
-      if (this.linkForm.hot === true) {
+      if (this.linkForm.hotValue === true) {
         this.linkForm.isHot = 1;
       } else {
         this.linkForm.isHot = 0;
@@ -393,7 +406,7 @@ export default {
     // 修改网址
     editLink() {
       this.editLinkShow = false;
-      if (this.linkForm.hot === true) {
+      if (this.linkForm.hotValue === true) {
         this.linkForm.isHot = 1;
       } else {
         this.linkForm.isHot = 0;
@@ -445,7 +458,8 @@ export default {
         categoryId: "",
         categoryName: "",
         url: "",
-        isHot: false,
+        isHot: 0,
+        hotValue: false,
         description: "",
       };
     },
