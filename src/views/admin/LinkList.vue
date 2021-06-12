@@ -202,21 +202,11 @@ export default {
     // 初始化数据
     getCategory() {
       let self = this;
-
-      self
-        .axios({
-          method: "get",
-          url: "http://zhyiwen.com:9003/category?page=1",
-          headers: {
-            "Content-type": "application/json",
-          },
-        })
-        .then((response) => {
+      this.request.get({
+        url:'/category?page=1'
+      }).then((response) => {
           self.categoryList = response.data.result.records;
         })
-        .catch(function (error) {
-          console.log(error);
-        });
     },
     onLoadData() {
       let self = this;

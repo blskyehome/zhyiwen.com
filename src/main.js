@@ -11,7 +11,9 @@ import VueParticles from 'vue-particles'
 
 /* 引入公共js*/
 import common from '@/common/common.js'
+import request from '@/api/request'
 Vue.prototype.common=common;
+Vue.prototype.request=request;
 
 Vue.use(VueParticles) 
 
